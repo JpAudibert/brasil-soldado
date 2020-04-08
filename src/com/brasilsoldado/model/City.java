@@ -2,6 +2,16 @@ package com.brasilsoldado.model;
 
 public class City {
 
+    public City() {
+    }
+
+    public City(int idCity, String name, String initials, int fkStateId) {
+        this.idCity = idCity;
+        this.name = name;
+        this.initials = initials;
+        this.fkStateId = fkStateId;
+    }
+    
     private int idCity;
     private String name;
     private String initials;

@@ -2,7 +2,7 @@ package com.brasilsoldado.controller;
 
 import com.brasilsoldado.helpers.DBConnection;
 import com.brasilsoldado.interfaces.IBasicController;
-import com.brasilsoldado.model.State;
+import com.brasilsoldado.model.City;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,68 +10,69 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class StateController implements IBasicController<State> {
+public class CityController implements IBasicController<City> {
 
     private ResultSet result;
 
     @Override
-    public ArrayList<State> index() {
-        ArrayList states = new ArrayList<State>();
+    public ArrayList<City> index() {
+        ArrayList cities = new ArrayList<City>();
         try {
             Statement stmt = DBConnection
                     .getInstance()
                     .getConnection()
                     .createStatement();
 
-            String query = " SELECT * FROM state ORDER BY name";
+            String query = " SELECT * FROM city ORDER BY name";
 
             result = stmt.executeQuery(query);
             for (int i = 0; result.next(); i++) {
-                State newState = new State(i + 1, result.getString("name"), result.getString("initials"));
-                states.add(newState);
+                City newCity = new City(i + 1, result.getString("name"), result.getString("initials"), result.getInt("fkstateid"));
+                cities.add(newCity);
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return states;
+        return cities;
     }
 
     @Override
-    public ArrayList<State> show(int id) {
-        ArrayList states = new ArrayList<State>();
+    public ArrayList<City> show(int id) {
+        ArrayList cities = new ArrayList<City>();
         try {
             Statement stmt = DBConnection
                     .getInstance()
                     .getConnection()
                     .createStatement();
 
-            String query = " SELECT * FROM state WHERE idstate = " + id;
+            String query = " SELECT * FROM city WHERE idcity = " + id;
 
             result = stmt.executeQuery(query);
             for (int i = 0; result.next(); i++) {
-                State newState = new State(i + 1, result.getString("name"), result.getString("initials"));
-                states.add(newState);
+                City newCity = new City(i + 1, result.getString("name"), result.getString("initials"), result.getInt("fkstateid"));
+                cities.add(newCity);
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return states;
+        return cities;
     }
 
     @Override
-    public boolean store(State state) {
+    public boolean store(City city) {
         boolean response = false;
         try {
             Statement stmt = DBConnection
                     .getInstance()
                     .getConnection()
                     .createStatement();
-            String query = " INSERT INTO state VALUES("
+            String query = " INSERT INTO city VALUES("
                     + "DEFAULT,"
-                    + "\'" + state.getName() + "\',"
-                    + "\'" + state.getInitials() + "\'"
+                    + "\'" + city.getName() + "\', "
+                    + "\'" + city.getInitials() + "\', "
+                    + "\'" + city.getFkStateId() + "\'"
                     + ")";
 
             System.out.println(query);
@@ -87,17 +88,17 @@ public class StateController implements IBasicController<State> {
     }
 
     @Override
-    public boolean update(State state, int id) {
+    public boolean update(City city, int id) {
         boolean response = false;
         try {
             Statement stmt = DBConnection
                     .getInstance()
                     .getConnection()
                     .createStatement();
-            String query = " UPDATE state SET "
-                    + "name = '" + state.getName() + "',"
-                    + "initials = '" + state.getInitials() + "' "
-                    + "WHERE idstate = " + id;
+            String query = " UPDATE city SET "
+                    + "name = '" + city.getName() + "',"
+                    + "initials = '" + city.getInitials() + "' "
+                    + "WHERE idcity = " + id;
 
             System.out.println(query);
 
@@ -120,7 +121,7 @@ public class StateController implements IBasicController<State> {
                     .getConnection()
                     .createStatement();
 
-            String query = " DELETE FROM state WHERE idstate = " + id;
+            String query = " DELETE FROM city WHERE idcity = " + id;
 
             if (stmt.execute(query)) {
                 response = true;
