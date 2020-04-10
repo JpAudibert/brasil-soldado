@@ -4,7 +4,6 @@ import com.brasilsoldado.helpers.DBConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,12 +28,12 @@ public class LoginController {
             result = stmt.executeQuery(query);
 
             if (result.next()) {
-                if (decoder.decode(result.getString("password")).equals(password)) {
+                String passwordDecoded = new String(decoder.decode(result.getString("password")));
+                if (passwordDecoded.equals(password)) {
                     auth = true;
                     System.out.println("FOI MEU BOM");
                 }
             }
-            System.out.println(Arrays.toString(decoder.decode(result.getString("password"))));
             return auth;
         } catch (SQLException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
