@@ -32,7 +32,7 @@ public class CityController implements IBasicController<City> {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return cities;
     }
@@ -55,7 +55,7 @@ public class CityController implements IBasicController<City> {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return cities;
     }
@@ -81,7 +81,7 @@ public class CityController implements IBasicController<City> {
                 response = true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return response;
@@ -106,7 +106,7 @@ public class CityController implements IBasicController<City> {
                 response = true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return response;
@@ -127,7 +127,7 @@ public class CityController implements IBasicController<City> {
                 response = true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return response;
     }

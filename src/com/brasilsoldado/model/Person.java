@@ -1,6 +1,7 @@
 package com.brasilsoldado.model;
 
 import java.sql.Date;
+import java.util.Base64;
 
 public class Person {
 
@@ -8,13 +9,32 @@ public class Person {
     private String name;
     private String surname;
     private Date birthday;
-    private int cpf;
+    private String cpf;
     private String email;
+    private String password;
     private int type;
     private boolean enabled;
     private String momsName;
     private String dadsName;
     private int fkCityId;
+
+    public Person() {
+    }
+
+    public Person(int idPerson, String name, String surname, Date birthday, String cpf, String email, String password, int type, boolean enabled, String momsName, String dadsName, int fkCityId) {
+        this.idPerson = idPerson;
+        this.name = name;
+        this.surname = surname;
+        this.birthday = birthday;
+        this.cpf = cpf;
+        this.email = email;
+        this.password = password;
+        this.type = type;
+        this.enabled = enabled;
+        this.momsName = momsName;
+        this.dadsName = dadsName;
+        this.fkCityId = fkCityId;
+    }
 
     public int getIdPerson() {
         return idPerson;
@@ -48,11 +68,11 @@ public class Person {
         this.birthday = birthday;
     }
 
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
@@ -62,6 +82,16 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        Base64.Encoder encoder = Base64.getEncoder();
+        password = encoder.encodeToString(password.getBytes());
+        this.password = password;
     }
 
     public int getType() {
