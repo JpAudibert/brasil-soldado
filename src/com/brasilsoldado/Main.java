@@ -7,7 +7,6 @@ public class Main {
 
     public static void main(String[] args) {
         if (DBConnection.getInstance() != null) {
-            System.out.println("abriu");
             new ViewStart().setVisible(true);
         } else {
             System.out.println("deu problema");

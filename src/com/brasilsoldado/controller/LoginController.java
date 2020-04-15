@@ -31,7 +31,6 @@ public class LoginController {
                 String passwordDecoded = new String(decoder.decode(result.getString("password")));
                 if (passwordDecoded.equals(password)) {
                     auth = true;
-                    System.out.println("FOI MEU BOM");
                 }
             }
             return auth;

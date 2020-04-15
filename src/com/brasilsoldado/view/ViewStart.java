@@ -48,7 +48,7 @@ public class ViewStart extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(57, 128, 65));
 
-        newPerson.setText("Cadastra-se");
+        newPerson.setText("Cadastre-se");
         newPerson.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 newPersonActionPerformed(evt);
@@ -146,11 +146,13 @@ public class ViewStart extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void newPersonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newPersonActionPerformed
-        // TODO add your handling code here:
+        new ViewPersonCreate().setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_newPersonActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        // TODO add your handling code here:
+        new ViewLogin().setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
