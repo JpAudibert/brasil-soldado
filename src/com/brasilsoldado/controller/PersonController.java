@@ -89,7 +89,7 @@ public class PersonController implements IBasicController<Person> {
     @Override
     public boolean store(Person person) {
         boolean response = false;
-        try {
+        try {            
             Statement stmt = DBConnection
                     .getInstance()
                     .getConnection()
