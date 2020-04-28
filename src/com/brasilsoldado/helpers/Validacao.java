@@ -24,6 +24,15 @@ public class Validacao {
         soma = 11 - soma % 11;
         return soma > 9 ? 0 : soma;
     }
+    
+    public static boolean notNull(String text){
+        boolean response = true;
+        if(text.equals("") || text == null){
+            response = false;
+        }
+        
+        return response;
+    }
 
     public static boolean validarCPF(String cpf) {
         if ((cpf == null) || (cpf.length() != 11)) {

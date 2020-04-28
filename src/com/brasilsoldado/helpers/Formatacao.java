@@ -122,15 +122,16 @@ public class Formatacao {
         return (dataFormatada);
     }
 
-    public static String ajustaDataAMD(String data) {
+    public static Date ajustaDataAMD(String data) {
         String dataFormatada = null;
+        Date dataDMA = null;
         try {
-            Date dataDMA = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+            dataDMA = new SimpleDateFormat("dd/MM/yyyy").parse(data);
             dataFormatada = new SimpleDateFormat("yyyy-MM-dd").format(dataDMA);
         } catch (Exception e) {
             System.err.println(e);
         }
-        return (dataFormatada);
+        return dataDMA;
     }
 
     public static String removerFormatacao(String dado) {
