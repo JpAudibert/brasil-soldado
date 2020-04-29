@@ -5,6 +5,14 @@ public class Warning {
     private int idWarning;
     private String message;
 
+    public Warning() {
+    }
+
+    public Warning(int idWarning, String message) {
+        this.idWarning = idWarning;
+        this.message = message;
+    }
+
     public int getIdWarning() {
         return idWarning;
     }

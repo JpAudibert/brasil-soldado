@@ -236,7 +236,8 @@ public class ViewLogin extends javax.swing.JFrame {
         } else {
             if (controller.authenticate(emailLogin, passwordLogin)) {
                 System.out.println("Logou");
-                //Abre dashboard
+                this.setVisible(false);
+                new ViewDashboard().setVisible(true);
             } else {
                 this.warning.setText("Email ou Senha incorretos");
                 this.warning.setVisible(true);

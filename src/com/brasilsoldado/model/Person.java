@@ -1,5 +1,6 @@
 package com.brasilsoldado.model;
 
+import com.brasilsoldado.helpers.Validacao;
 import java.util.Date;
 import java.util.Base64;
 
@@ -49,7 +50,9 @@ public class Person {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if (Validacao.notNull(name)) {
+            this.name = name;
+        }
     }
 
     public String getSurname() {
@@ -57,14 +60,16 @@ public class Person {
     }
 
     public void setSurname(String surname) {
-        this.surname = surname;
+        if (Validacao.notNull(surname)) {
+            this.surname = surname;
+        }
     }
 
     public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(Date birthday) { //TODO date validation
         this.birthday = birthday;
     }
 
@@ -73,7 +78,9 @@ public class Person {
     }
 
     public void setCpf(String cpf) {
-        this.cpf = cpf;
+        if (Validacao.validarCPF(cpf)) {
+            this.cpf = cpf;
+        }
     }
 
     public String getEmail() {
@@ -81,7 +88,9 @@ public class Person {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (Validacao.notNull(name)) {
+            this.email = email;
+        }
     }
 
     public String getPassword() {
