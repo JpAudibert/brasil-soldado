@@ -85,7 +85,7 @@ public class WarningController implements IBasicController<Warning> {
                     .createStatement();
             String query = " INSERT INTO warning VALUES("
                     + "DEFAULT,"
-                    + "\'" + warning.getTitle() + "\'"
+                    + "\'" + warning.getTitle() + "\',"
                     + "\'" + warning.getMessage() + "\'"
                     + ")";
 
@@ -108,7 +108,7 @@ public class WarningController implements IBasicController<Warning> {
                     .getConnection()
                     .createStatement();
             String query = " UPDATE warning SET "
-                    + "title = '" + warning.getTitle() + "'"
+                    + "title = '" + warning.getTitle() + "',"
                     + "message = '" + warning.getMessage() + "'"
                     + "WHERE idwarning = " + id;
 
