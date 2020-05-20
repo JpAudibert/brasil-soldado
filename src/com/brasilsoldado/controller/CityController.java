@@ -38,8 +38,8 @@ public class CityController implements IBasicController<City> {
     }
 
     @Override
-    public ArrayList<City> show(int id) {
-        ArrayList cities = new ArrayList<City>();
+    public City show(int id) {
+        City city = null;
         try {
             Statement stmt = DBConnection
                     .getInstance()
@@ -49,15 +49,19 @@ public class CityController implements IBasicController<City> {
             String query = " SELECT * FROM city WHERE idcity = " + id;
 
             result = stmt.executeQuery(query);
-            for (int i = 0; result.next(); i++) {
-                City newCity = new City(i + 1, result.getString("name"), result.getString("initials"), result.getInt("fkstateid"));
-                cities.add(newCity);
+            
+            if(result.next()){
+                city = new City();
+                city.setIdCity(result.getInt("idcity"));
+                city.setName(result.getString("name"));
+                city.setInitials(result.getString("initials"));
+                city.setFkStateId(result.getInt("fkstateid"));
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return cities;
+        return city;
     }
 
     @Override

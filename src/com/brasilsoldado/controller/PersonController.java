@@ -51,8 +51,8 @@ public class PersonController implements IBasicController<Person> {
     }
 
     @Override
-    public ArrayList<Person> show(int id) {
-        ArrayList people = new ArrayList<Person>();
+    public Person show(int id) {
+        Person person = null;
         try {
             Statement stmt = DBConnection
                     .getInstance()
@@ -62,28 +62,27 @@ public class PersonController implements IBasicController<Person> {
             String query = " SELECT * FROM person WHERE idperson = " + id;
 
             result = stmt.executeQuery(query);
-            for (int i = 0; result.next(); i++) {
-                Person newPerson = new Person(
-                        i + 1,
-                        result.getString("name"),
-                        result.getString("surname"),
-                        result.getDate("birthday"),
-                        result.getString("cpf"),
-                        result.getString("email"),
-                        result.getString("password"),
-                        result.getInt("type"),
-                        result.getBoolean("enabled"),
-                        result.getString("momsname"),
-                        result.getString("dadsname"),
-                        result.getInt("fkcityid")
-                );
-                people.add(newPerson);
+            
+            if(result.next()){
+                person = new Person();
+                person.setIdPerson(result.getInt("idperson"));
+                person.setName(result.getString("name"));
+                person.setSurname(result.getString("surname"));
+                person.setBirthday(result.getDate("birthday"));
+                person.setCpf(result.getString("cpf"));
+                person.setEmail(result.getString("email"));
+                person.setPassword(result.getString("password"));
+                person.setType(result.getInt("type"));
+                person.setEnabled(result.getBoolean("enabled"));
+                person.setMomsName(result.getString("momsname"));
+                person.setDadsName(result.getString("dadsname"));
+                person.setFkCityId(result.getInt("fkcityid"));
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return people;
+        return person;
     }
 
     @Override
@@ -101,12 +100,12 @@ public class PersonController implements IBasicController<Person> {
                     + "\'" + person.getBirthday() + "\', "
                     + "\'" + person.getCpf() + "\', "
                     + "\'" + person.getEmail() + "\', "
+                    + "\'" + person.getPassword() + "\',"
                     + "\'" + person.getType() + "\', "
                     + "\'" + person.isEnabled() + "\', "
                     + "\'" + person.getMomsName() + "\', "
                     + "\'" + person.getDadsName() + "\', "
-                    + "\'" + person.getFkCityId() + "\',"
-                    + "\'" + person.getPassword() + "\'"
+                    + "\'" + person.getFkCityId() + "\'"
                     + ")";
 
             System.out.println(query);

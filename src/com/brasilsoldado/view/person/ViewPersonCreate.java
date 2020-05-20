@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.brasilsoldado.view;
+package com.brasilsoldado.view.person;
 
 import com.brasilsoldado.controller.StateController;
 import com.brasilsoldado.helpers.Formatacao;

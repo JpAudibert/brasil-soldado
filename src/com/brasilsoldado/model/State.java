@@ -1,5 +1,7 @@
 package com.brasilsoldado.model;
 
+import com.brasilsoldado.helpers.Validacao;
+
 public class State {
 
     private int idState;

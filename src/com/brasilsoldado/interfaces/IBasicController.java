@@ -6,7 +6,7 @@ public interface IBasicController<T> {
 
     public ArrayList<T> index();
 
-    public ArrayList<T> show(int id);
+    public T show(int id);
 
     public boolean store(T o);
 

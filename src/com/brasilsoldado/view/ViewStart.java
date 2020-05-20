@@ -5,6 +5,8 @@
  */
 package com.brasilsoldado.view;
 
+import com.brasilsoldado.view.person.ViewPersonCreate;
+
 /**
  *
  * @author joaopedro

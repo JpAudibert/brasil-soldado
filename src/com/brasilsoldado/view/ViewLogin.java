@@ -5,6 +5,7 @@
  */
 package com.brasilsoldado.view;
 
+import com.brasilsoldado.view.person.ViewPersonCreate;
 import com.brasilsoldado.controller.LoginController;
 import java.awt.Color;
 
