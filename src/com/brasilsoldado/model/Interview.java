@@ -5,6 +5,14 @@ public class Interview {
     private int idInterview;
     private String report;
 
+    public Interview() {
+    }
+
+    public Interview(int idInterview, String report) {
+        this.idInterview = idInterview;
+        this.report = report;
+    }
+
     public int getIdInterview() {
         return idInterview;
     }
