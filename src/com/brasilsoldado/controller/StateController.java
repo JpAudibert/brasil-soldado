@@ -1,6 +1,7 @@
 package com.brasilsoldado.controller;
 
 import com.brasilsoldado.helpers.DBConnection;
+import com.brasilsoldado.helpers.InsertStates;
 import com.brasilsoldado.interfaces.IBasicController;
 import com.brasilsoldado.model.State;
 import java.sql.ResultSet;
@@ -81,7 +82,7 @@ public class StateController implements IBasicController<State> {
 
             System.out.println(query);
             stmt.execute(query);
-            
+
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
@@ -104,12 +105,12 @@ public class StateController implements IBasicController<State> {
 
             System.out.println(query);
             stmt.execute(query);
-            
+
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return false;
     }
 
@@ -123,10 +124,10 @@ public class StateController implements IBasicController<State> {
                     .createStatement();
 
             String query = " DELETE FROM state WHERE idstate = " + id;
-            
+
             System.out.println(query);
             stmt.execute(query);
-            
+
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
@@ -147,6 +148,17 @@ public class StateController implements IBasicController<State> {
 
         // cria matriz de acordo com nº de registros da tabela
         try {
+            result = DBConnection.getInstance().getConnection().createStatement().executeQuery(""
+                    + "SELECT CASE \n"
+                    + "         WHEN EXISTS (SELECT * FROM state LIMIT 1) THEN 1\n"
+                    + "         ELSE 0 \n"
+                    + "       END");
+            result.next();
+            if (result.getInt(1) == 0) {
+                System.out.println("Inserindo dados");
+                InsertStates.insertStates();
+            }
+
             result = DBConnection.getInstance().getConnection().createStatement().executeQuery(""
                     + "SELECT count(*) FROM state WHERE name ILIKE '%" + criteria + "%'");
 
