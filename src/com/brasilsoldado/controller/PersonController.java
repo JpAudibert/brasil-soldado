@@ -62,8 +62,8 @@ public class PersonController implements IBasicController<Person> {
             String query = " SELECT * FROM person WHERE idperson = " + id;
 
             result = stmt.executeQuery(query);
-            
-            if(result.next()){
+
+            if (result.next()) {
                 person = new Person();
                 person.setIdPerson(result.getInt("idperson"));
                 person.setName(result.getString("name"));
@@ -87,8 +87,7 @@ public class PersonController implements IBasicController<Person> {
 
     @Override
     public boolean store(Person person) {
-        boolean response = false;
-        try {            
+        try {
             Statement stmt = DBConnection
                     .getInstance()
                     .getConnection()
@@ -110,19 +109,17 @@ public class PersonController implements IBasicController<Person> {
 
             System.out.println(query);
 
-            if (stmt.execute(query)) {
-                response = true;
-            }
+            stmt.execute(query);
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return response;
+        return false;
     }
 
     @Override
     public boolean update(Person person, int id) {
-        boolean response = false;
         try {
             Statement stmt = DBConnection
                     .getInstance()
@@ -144,19 +141,17 @@ public class PersonController implements IBasicController<Person> {
 
             System.out.println(query);
 
-            if (stmt.execute(query)) {
-                response = true;
-            }
+            stmt.execute(query);
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return response;
+        return false;
     }
 
     @Override
     public boolean delete(int id) {
-        boolean response = false;
         try {
             Statement stmt = DBConnection
                     .getInstance()
@@ -165,13 +160,12 @@ public class PersonController implements IBasicController<Person> {
 
             String query = " DELETE FROM person WHERE idperson = " + id;
 
-            if (stmt.execute(query)) {
-                response = true;
-            }
+            stmt.execute(query);
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return response;
+        return false;
     }
 
 }

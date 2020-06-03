@@ -50,9 +50,7 @@ public class Person {
     }
 
     public void setName(String name) {
-        if (Validacao.notNull(name)) {
-            this.name = name;
-        }
+        this.name = name;
     }
 
     public String getSurname() {
@@ -60,16 +58,14 @@ public class Person {
     }
 
     public void setSurname(String surname) {
-        if (Validacao.notNull(surname)) {
-            this.surname = surname;
-        }
+        this.surname = surname;
     }
 
     public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) { //TODO date validation
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
@@ -78,9 +74,7 @@ public class Person {
     }
 
     public void setCpf(String cpf) {
-        if (Validacao.validarCPF(cpf)) {
-            this.cpf = cpf;
-        }
+        this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -88,9 +82,7 @@ public class Person {
     }
 
     public void setEmail(String email) {
-        if (Validacao.notNull(name)) {
-            this.email = email;
-        }
+        this.email = email;
     }
 
     public String getPassword() {

@@ -5,15 +5,19 @@
  */
 package com.brasilsoldado.view.person;
 
-import com.brasilsoldado.controller.StateController;
+import com.brasilsoldado.controller.PersonController;
+import com.brasilsoldado.helpers.ComboItem;
 import com.brasilsoldado.helpers.Formatacao;
 import com.brasilsoldado.helpers.Validacao;
 import com.brasilsoldado.model.Person;
 import com.brasilsoldado.model.State;
+import com.brasilsoldado.view.ViewDashboard;
+import com.brasilsoldado.helpers.CombosDAO;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,11 +25,15 @@ import java.util.Date;
  */
 public class ViewPersonCreate extends javax.swing.JFrame {
 
+    final CombosDAO combo = new CombosDAO();
+    final PersonController personController = new PersonController();
+
     /**
      * Creates new form ViewPersonCreate
      */
     public ViewPersonCreate() {
         initComponents();
+        combo.popularCombo("state", "idstate", "name", fkStateId, "");
         Formatacao.formatarData(this.personBirthday);
         Formatacao.formatarCpf(this.personCpf);
     }
@@ -50,23 +58,27 @@ public class ViewPersonCreate extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        personFathersName = new javax.swing.JTextField();
-        personMothersName = new javax.swing.JTextField();
         personSurname = new javax.swing.JTextField();
-        personPassword = new javax.swing.JTextField();
         personEmail = new javax.swing.JTextField();
         personName = new javax.swing.JTextField();
         personBirthday = new javax.swing.JFormattedTextField();
         personCpf = new javax.swing.JFormattedTextField();
+        fkCityId = new javax.swing.JComboBox<>();
+        fkStateId = new javax.swing.JComboBox<>();
+        personFathersName = new javax.swing.JTextField();
+        personMothersName = new javax.swing.JTextField();
+        personPassword = new javax.swing.JPasswordField();
         btnSend = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 600));
+        setPreferredSize(new java.awt.Dimension(800, 750));
 
         jPanel1.setBackground(new java.awt.Color(57, 128, 65));
         jPanel1.setForeground(new java.awt.Color(254, 254, 254));
-        jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
+        jPanel1.setPreferredSize(new java.awt.Dimension(800, 750));
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(254, 254, 254));
@@ -107,6 +119,14 @@ public class ViewPersonCreate extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(254, 254, 254));
         jLabel9.setText("Nome da Mãe:");
 
+        jLabel10.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(254, 254, 254));
+        jLabel10.setText("Estado de residência:");
+
+        jLabel11.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(254, 254, 254));
+        jLabel11.setText("Cidade de residência:");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -120,55 +140,81 @@ public class ViewPersonCreate extends javax.swing.JFrame {
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
                         .addContainerGap())
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
                 .addComponent(jLabel2)
-                .addGap(26, 26, 26)
+                .addGap(31, 31, 31)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
-                .addGap(18, 18, 18)
+                .addGap(34, 34, 34)
                 .addComponent(jLabel4)
-                .addGap(18, 18, 18)
+                .addGap(26, 26, 26)
                 .addComponent(jLabel7)
-                .addGap(18, 18, 18)
+                .addGap(28, 28, 28)
                 .addComponent(jLabel6)
-                .addGap(18, 18, 18)
+                .addGap(26, 26, 26)
                 .addComponent(jLabel9)
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
                 .addComponent(jLabel8)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel10)
+                .addGap(30, 30, 30)
+                .addComponent(jLabel11)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(57, 128, 65));
 
-        personFathersName.setMinimumSize(new java.awt.Dimension(10, 35));
-        personFathersName.addActionListener(new java.awt.event.ActionListener() {
+        personSurname.setMinimumSize(new java.awt.Dimension(10, 35));
+        personSurname.setPreferredSize(new java.awt.Dimension(28, 35));
+
+        personEmail.setMinimumSize(new java.awt.Dimension(10, 35));
+        personEmail.setPreferredSize(new java.awt.Dimension(28, 35));
+
+        personName.setMinimumSize(new java.awt.Dimension(10, 35));
+        personName.setPreferredSize(new java.awt.Dimension(28, 35));
+
+        personBirthday.setMinimumSize(new java.awt.Dimension(10, 35));
+        personBirthday.setPreferredSize(new java.awt.Dimension(28, 35));
+
+        personCpf.setMinimumSize(new java.awt.Dimension(10, 35));
+        personCpf.setPreferredSize(new java.awt.Dimension(28, 35));
+
+        fkCityId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        fkStateId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fkStateId.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                fkStateIdItemStateChanged(evt);
+            }
+        });
+        fkStateId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                personFathersNameActionPerformed(evt);
+                fkStateIdActionPerformed(evt);
             }
         });
 
+        personFathersName.setMinimumSize(new java.awt.Dimension(10, 35));
+        personFathersName.setPreferredSize(new java.awt.Dimension(28, 35));
+
         personMothersName.setMinimumSize(new java.awt.Dimension(10, 35));
+        personMothersName.setPreferredSize(new java.awt.Dimension(28, 35));
 
-        personSurname.setMinimumSize(new java.awt.Dimension(10, 35));
-
-        personPassword.setMinimumSize(new java.awt.Dimension(10, 35));
-
-        personEmail.setMinimumSize(new java.awt.Dimension(10, 35));
-
-        personName.setMinimumSize(new java.awt.Dimension(10, 35));
-
-        personBirthday.setMinimumSize(new java.awt.Dimension(10, 35));
-
-        personCpf.setMinimumSize(new java.awt.Dimension(10, 35));
+        personPassword.setPreferredSize(new java.awt.Dimension(28, 35));
+        personPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                personPasswordActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -177,37 +223,55 @@ public class ViewPersonCreate extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(personBirthday, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(personFathersName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(personMothersName, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
-                    .addComponent(personPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
-                    .addComponent(personEmail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
-                    .addComponent(personName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
-                    .addComponent(personSurname, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
-                    .addComponent(personCpf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(45, 45, 45))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(fkCityId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(fkStateId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(personPassword, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(personMothersName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(personFathersName, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(personBirthday, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(personEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(personName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(personSurname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(personCpf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(45, 45, 45))))
         );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {fkCityId, fkStateId, personFathersName});
+
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
                 .addComponent(personName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(personSurname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(personBirthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(personCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(12, 12, 12)
                 .addComponent(personEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(personPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(12, 12, 12)
                 .addComponent(personMothersName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(personFathersName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fkStateId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fkCityId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {fkCityId, fkStateId, personFathersName});
 
         btnSend.setText("Enviar Dados");
         btnSend.addActionListener(new java.awt.event.ActionListener() {
@@ -223,47 +287,42 @@ public class ViewPersonCreate extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(223, 223, 223)
+                        .addGap(254, 254, 254)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(270, 270, 270)
+                        .addGap(27, 27, 27)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(222, 222, 222)
                         .addComponent(btnSend, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addGap(31, 31, 31)
                 .addComponent(btnSend, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 849, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 716, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 49, Short.MAX_VALUE))
         );
 
         pack();
@@ -272,29 +331,67 @@ public class ViewPersonCreate extends javax.swing.JFrame {
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
         try {
             Person person = new Person();
+            boolean response = false;
+            ComboItem item = (ComboItem) this.fkCityId.getSelectedItem();
             
-            String name = Validacao.notNull(this.personName.getText()) ? this.personName.getText() : "N/A";
-            String surname = Validacao.notNull(this.personSurname.getText()) ? this.personSurname.getText() : "N/A";
-            Date birthday = Validacao.notNull(this.personBirthday.getText()) ? Formatacao.ajustaDataAMD(this.personBirthday.getText()) : new Date();
-            String cpf = Validacao.validarCPF(this.personCpf.getText()) ? this.personCpf.getText() : "N/A";
-            String mothersName = Validacao.notNull(this.personMothersName.getText()) ? this.personMothersName.getText() : "N/A";
-            String fathersName = Validacao.notNull(this.personFathersName.getText()) ? this.personFathersName.getText() : "N/A";
-            
-            person.setName(name);
-            person.setSurname(surname);
-            person.setBirthday(birthday);
-            person.setMomsName(mothersName);
-            person.setDadsName(fathersName);
-            
-            
+            if (Validacao.notNull(this.personName.getText())
+                    && Validacao.notNull(this.personSurname.getText())
+                    && Validacao.notNull(this.personBirthday.getText())
+                    && Validacao.validarCPF(Formatacao.removerFormatacao(this.personCpf.getText()))
+                    && Validacao.notNull(this.personEmail.getText())
+                    && Validacao.notNull(this.personPassword.getText())
+                    && item.getCodigo() != 0) {
+                person.setName(this.personName.getText());
+                person.setSurname(this.personSurname.getText());
+                person.setBirthday(Formatacao.ajustaDataAMD(this.personBirthday.getText()));
+                person.setCpf(Formatacao.removerFormatacao(this.personCpf.getText()));
+                person.setEmail(this.personEmail.getText());
+                person.setPassword(this.personPassword.getText());
+                person.setType(1);
+                person.setEnabled(true);
+                person.setMomsName(this.personMothersName.getText());
+                person.setDadsName(this.personFathersName.getText());
+                person.setFkCityId(item.getCodigo());
+                
+                response = this.personController.store(person);
+                System.out.println(response);
+
+                if (response) {
+                    JOptionPane.showMessageDialog(null, "Registro Salvo com sucesso!");
+                    this.personName.setText("");
+                    this.personSurname.setText("");
+                    this.personBirthday.setText("");
+                    this.personCpf.setText("");
+                    this.personEmail.setText("");
+                    this.personPassword.setText("");
+                    this.personMothersName.setText("");
+                    this.personFathersName.setText("");
+                    this.personName.setText("");
+
+                    this.setVisible(false);
+                    new ViewDashboard().setVisible(true);
+
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios.");
+            }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_btnSendActionPerformed
 
-    private void personFathersNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_personFathersNameActionPerformed
+    private void fkStateIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fkStateIdActionPerformed
+        combo.popularCombo("city", "idcity", "name", fkCityId, " WHERE fkstateid = " + this.fkStateId.getSelectedIndex());
+    }//GEN-LAST:event_fkStateIdActionPerformed
+
+    private void fkStateIdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fkStateIdItemStateChanged
+
+    }//GEN-LAST:event_fkStateIdItemStateChanged
+
+    private void personPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_personPasswordActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_personFathersNameActionPerformed
+    }//GEN-LAST:event_personPasswordActionPerformed
 
     /**
      * @param args the command line arguments
@@ -333,7 +430,11 @@ public class ViewPersonCreate extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSend;
+    private javax.swing.JComboBox<String> fkCityId;
+    private javax.swing.JComboBox<String> fkStateId;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -351,7 +452,7 @@ public class ViewPersonCreate extends javax.swing.JFrame {
     private javax.swing.JTextField personFathersName;
     private javax.swing.JTextField personMothersName;
     private javax.swing.JTextField personName;
-    private javax.swing.JTextField personPassword;
+    private javax.swing.JPasswordField personPassword;
     private javax.swing.JTextField personSurname;
     // End of variables declaration//GEN-END:variables
 }

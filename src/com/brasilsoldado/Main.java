@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         if (DBConnection.getInstance() != null) {
-            new ViewState().setVisible(true);
+            new ViewPersonCreate().setVisible(true);
 //            new ViewStart().setVisible(true);
         } else {
             System.out.println("deu problema");
