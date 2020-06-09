@@ -1,6 +1,7 @@
 package com.brasilsoldado;
 
 import com.brasilsoldado.helpers.DBConnection;
+import com.brasilsoldado.view.ViewBattalion;
 import com.brasilsoldado.view.ViewCity;
 import com.brasilsoldado.view.ViewStart;
 import com.brasilsoldado.view.person.ViewPersonCreate;
@@ -12,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
         if (DBConnection.getInstance() != null) {
-            new ViewPersonCreate().setVisible(true);
+            new ViewBattalion().setVisible(true);
 //            new ViewStart().setVisible(true);
         } else {
             System.out.println("deu problema");

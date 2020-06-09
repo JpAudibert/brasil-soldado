@@ -7,6 +7,16 @@ public class Battalion {
     private int idPersonResponsible;
     private int fkCityId;
 
+    public Battalion() {
+    }
+
+    public Battalion(int idBattalion, int qttMembers, int idPersonResponsible, int fkCityId) {
+        this.idBattalion = idBattalion;
+        this.qttMembers = qttMembers;
+        this.idPersonResponsible = idPersonResponsible;
+        this.fkCityId = fkCityId;
+    }
+
     public int getIdBattalion() {
         return idBattalion;
     }

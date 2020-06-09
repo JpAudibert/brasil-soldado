@@ -1,10 +1,10 @@
 package com.brasilsoldado.controller;
 
 import com.brasilsoldado.helpers.DBConnection;
+import com.brasilsoldado.helpers.InsertStates;
 import com.brasilsoldado.interfaces.IBasicController;
-import com.brasilsoldado.model.City;
-import java.awt.Color;
-import java.awt.Component;
+import com.brasilsoldado.model.Battalion;
+import com.brasilsoldado.model.State;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,134 +12,130 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-public class CityController implements IBasicController<City> {
+public class BattalionController implements IBasicController<Battalion> {
 
     private ResultSet result;
 
     @Override
-    public ArrayList<City> index() {
-        ArrayList cities = new ArrayList<City>();
+    public ArrayList<Battalion> index() {
+        ArrayList battalions = new ArrayList<Battalion>();
         try {
             Statement stmt = DBConnection
                     .getInstance()
                     .getConnection()
                     .createStatement();
 
-            String query = " SELECT * FROM city ORDER BY name";
+            String query = " SELECT * FROM battalion ORDER BY idbattalion";
 
             result = stmt.executeQuery(query);
             for (int i = 0; result.next(); i++) {
-                City newCity = new City(i + 1, result.getString("name"), result.getString("initials"), result.getInt("fkstateid"));
-                cities.add(newCity);
+                Battalion newBattalion = new Battalion(i + 1, result.getInt("qttmembers"), result.getInt("idpersonresponsible"), result.getInt("fkidcity"));
+                battalions.add(newBattalion);
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return cities;
+        return battalions;
     }
 
     @Override
-    public City show(int id) {
-        City city = null;
+    public Battalion show(int id) {
+        Battalion battalion = null;
         try {
             Statement stmt = DBConnection
                     .getInstance()
                     .getConnection()
                     .createStatement();
 
-            String query = " SELECT * FROM city WHERE idcity = " + id;
+            String query = " SELECT * FROM battalion WHERE idbattalion = " + id;
 
             result = stmt.executeQuery(query);
 
             if (result.next()) {
-                city = new City();
-                city.setIdCity(result.getInt("idcity"));
-                city.setName(result.getString("name"));
-                city.setInitials(result.getString("initials"));
-                city.setFkStateId(result.getInt("fkstateid"));
+                battalion = new Battalion();
+                battalion.setIdBattalion(result.getInt("idbattalion"));
+                battalion.setQttMembers(result.getInt("qttmembers"));
+                battalion.setIdPersonResponsible(result.getInt("idpersonresponsible"));
+                battalion.setFkCityId(result.getInt("fkcityid"));
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return city;
+        return battalion;
     }
 
     @Override
-    public boolean store(City city) {
-        boolean response = false;
+    public boolean store(Battalion battalion) {
         try {
             Statement stmt = DBConnection
                     .getInstance()
                     .getConnection()
                     .createStatement();
-            String query = " INSERT INTO city VALUES("
+            String query = " INSERT INTO battalion VALUES("
                     + "DEFAULT,"
-                    + "\'" + city.getName() + "\', "
-                    + "\'" + city.getInitials() + "\', "
-                    + "\'" + city.getFkStateId() + "\'"
+                    + "\'" + battalion.getQttMembers() + "\',"
+                    + "\'" + battalion.getIdPersonResponsible() + "\',"
+                    + "\'" + battalion.getFkCityId() + "\'"
                     + ")";
 
             System.out.println(query);
+            stmt.execute(query);
 
-            if (stmt.execute(query)) {
-                response = true;
-            }
+            return true;
         } catch (SQLException ex) {
-            Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return response;
+        return false;
     }
 
     @Override
-    public boolean update(City city, int id) {
-        boolean response = false;
+    public boolean update(Battalion battalion, int id) {
         try {
             Statement stmt = DBConnection
                     .getInstance()
                     .getConnection()
                     .createStatement();
-            String query = " UPDATE city SET "
-                    + "name = '" + city.getName() + "',"
-                    + "initials = '" + city.getInitials() + "' "
-                    + "WHERE idcity = " + id;
+            String query = " UPDATE battalion SET "
+                    + "qttmembers = '" + battalion.getQttMembers() + "',"
+                    + "idpersonresponsible = '" + battalion.getIdPersonResponsible() + "',"
+                    + "fkcityid = '" + battalion.getFkCityId() + "' "
+                    + "WHERE battalion = " + id;
 
             System.out.println(query);
+            stmt.execute(query);
 
-            if (stmt.execute(query)) {
-                response = true;
-            }
+            return true;
         } catch (SQLException ex) {
-            Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return response;
+        return false;
     }
 
     @Override
     public boolean delete(int id) {
-        boolean response = false;
         try {
             Statement stmt = DBConnection
                     .getInstance()
                     .getConnection()
                     .createStatement();
 
-            String query = " DELETE FROM city WHERE idcity = " + id;
+            String query = " DELETE FROM battalion WHERE idbattalion = " + id;
 
-            if (stmt.execute(query)) {
-                response = true;
-            }
+            System.out.println(query);
+            stmt.execute(query);
+
+            return true;
         } catch (SQLException ex) {
-            Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return response;
+        return false;
     }
 
     /* Popula JTable */
@@ -150,14 +146,14 @@ public class CityController implements IBasicController<City> {
         // cabecalho da tabela
         Object[] cabecalho = new Object[4];
         cabecalho[0] = "Código";
-        cabecalho[1] = "Cidade";
-        cabecalho[2] = "Sigla";
-        cabecalho[3] = "UF";
+        cabecalho[1] = "Quantidade de membros";
+        cabecalho[2] = "Responsável";
+        cabecalho[3] = "Cidade - UF";
 
         // cria matriz de acordo com nº de registros da tabela
         try {
             result = DBConnection.getInstance().getConnection().createStatement().executeQuery(""
-                    + "SELECT count(c.idcity) FROM city c INNER JOIN state s ON c.fkstateid = s.idstate WHERE s.name ILIKE '%" + criteria + "%'");
+                    + "SELECT count(b.idbattalion) FROM battalion b INNER JOIN city c ON b.fkcityid = c.idcity WHERE c.name ILIKE '%" + criteria + "%'");
 
             result.next();
 
@@ -173,16 +169,25 @@ public class CityController implements IBasicController<City> {
         // efetua consulta na tabela
         try {
             result = DBConnection.getInstance().getConnection().createStatement().executeQuery(""
-                    + "SELECT c.idcity, c.name AS \"cityname\", c.initials AS \"cityinitials\", "
-                    + "s.initials AS \"uf\" FROM city c INNER JOIN state s ON "
-                    + "c.fkstateid = s.idstate WHERE s.name ILIKE '%" + criteria + "%'");
+                    + " SELECT \n"
+                    + "	b.idbattalion,\n"
+                    + "	b.qttmembers,\n"
+                    + "	CONCAT (p.name, ' ', p.surname) AS person,\n"
+                    + "	CONCAT(c.name, ' - ', s.initials) AS city\n"
+                    + " FROM\n"
+                    + "	battalion b \n"
+                    + "		INNER JOIN person p ON b.idpersonresponsible = p.idperson\n"
+                    + "		INNER JOIN city c ON c.idcity = b.fkcityid\n"
+                    + "		INNER JOIN state s ON c.fkstateid = s.idstate"
+                    + " WHERE"
+                    + " c.name ILIKE '%" + criteria + "%'");
 
             while (result.next()) {
 
-                dadosTabela[lin][0] = result.getInt("idcity");
-                dadosTabela[lin][1] = result.getString("cityname");
-                dadosTabela[lin][2] = result.getString("cityinitials");
-                dadosTabela[lin][3] = result.getString("uf");
+                dadosTabela[lin][0] = result.getInt("idbattalion");
+                dadosTabela[lin][1] = result.getInt("qttmembers");
+                dadosTabela[lin][2] = result.getString("person");
+                dadosTabela[lin][3] = result.getString("city");
 
                 // caso a coluna precise exibir uma imagem
 //                if (resultadoQ.getBoolean("Situacao")) {
@@ -261,5 +266,4 @@ public class CityController implements IBasicController<City> {
 //            }
 //        });
     }
-
 }

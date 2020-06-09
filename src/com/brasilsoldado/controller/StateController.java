@@ -116,7 +116,6 @@ public class StateController implements IBasicController<State> {
 
     @Override
     public boolean delete(int id) {
-        boolean response = false;
         try {
             Statement stmt = DBConnection
                     .getInstance()

@@ -7,6 +7,7 @@ package com.brasilsoldado.view;
 
 import com.brasilsoldado.view.person.ViewPersonCreate;
 import com.brasilsoldado.controller.LoginController;
+import com.brasilsoldado.controller.PersonController;
 import java.awt.Color;
 
 /**
@@ -226,17 +227,18 @@ public class ViewLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_newPersonActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        LoginController controller = new LoginController();
+        LoginController loginController = new LoginController();
+        PersonController personController = new PersonController();
         String emailLogin = this.email.getText();
         String passwordLogin = this.password.getText();
         if ("".equals(emailLogin) || emailLogin == null || "".equals(passwordLogin) || passwordLogin == null) {
             this.warning.setText("Preencha os campos obrigatórios, indicados por *");
             this.warning.setVisible(true);
         } else {
-            if (controller.authenticate(emailLogin, passwordLogin)) {
+            if (loginController.authenticate(emailLogin, passwordLogin)) {
                 System.out.println("Logou");
                 this.setVisible(false);
-                new ViewDashboard().setVisible(true);
+                new ViewDashboard(emailLogin).setVisible(true);
             } else {
                 this.warning.setText("Email ou Senha incorretos");
                 this.warning.setVisible(true);

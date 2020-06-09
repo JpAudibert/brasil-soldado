@@ -5,17 +5,29 @@
  */
 package com.brasilsoldado.view;
 
+import com.brasilsoldado.controller.PersonController;
+import com.brasilsoldado.model.Person;
+
 /**
  *
  * @author joaopedro
  */
 public class ViewDashboard extends javax.swing.JFrame {
+    
+    final PersonController personController = new PersonController();
 
+    public ViewDashboard(){
+        initComponents();
+    }
+    
     /**
      * Creates new form ViewDashboard
+     * @param email
      */
-    public ViewDashboard() {
+    public ViewDashboard(String email) {
+        Person person = this.personController.show(email);
         initComponents();
+        this.welcome.setText("Bem Vindo, " + person.getName());
     }
 
     /**
@@ -28,33 +40,33 @@ public class ViewDashboard extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        welcome = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(57, 128, 65));
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
 
-        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(254, 254, 254));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Bem Vindo!");
+        welcome.setFont(new java.awt.Font("Ubuntu", 1, 36)); // NOI18N
+        welcome.setForeground(new java.awt.Color(254, 254, 254));
+        welcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        welcome.setText("Bem Vindo!");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(158, 158, 158)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(332, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(249, Short.MAX_VALUE)
+                .addComponent(welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(241, 241, 241))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(505, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(513, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -111,7 +123,7 @@ public class ViewDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel welcome;
     // End of variables declaration//GEN-END:variables
 }

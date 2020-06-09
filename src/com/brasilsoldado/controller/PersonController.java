@@ -84,6 +84,40 @@ public class PersonController implements IBasicController<Person> {
         }
         return person;
     }
+    
+    public Person show(String email) {
+        Person person = null;
+        try {
+            Statement stmt = DBConnection
+                    .getInstance()
+                    .getConnection()
+                    .createStatement();
+
+            String query = " SELECT * FROM person WHERE email = " + email;
+
+            result = stmt.executeQuery(query);
+
+            if (result.next()) {
+                person = new Person();
+                person.setIdPerson(result.getInt("idperson"));
+                person.setName(result.getString("name"));
+                person.setSurname(result.getString("surname"));
+                person.setBirthday(result.getDate("birthday"));
+                person.setCpf(result.getString("cpf"));
+                person.setEmail(result.getString("email"));
+                person.setPassword(result.getString("password"));
+                person.setType(result.getInt("type"));
+                person.setEnabled(result.getBoolean("enabled"));
+                person.setMomsName(result.getString("momsname"));
+                person.setDadsName(result.getString("dadsname"));
+                person.setFkCityId(result.getInt("fkcityid"));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return person;
+    }
 
     @Override
     public boolean store(Person person) {
