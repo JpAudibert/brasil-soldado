@@ -5,32 +5,56 @@
  */
 package com.brasilsoldado.view.person;
 
+import com.brasilsoldado.controller.CityController;
 import com.brasilsoldado.controller.PersonController;
 import com.brasilsoldado.helpers.ComboItem;
 import com.brasilsoldado.helpers.Formatacao;
 import com.brasilsoldado.helpers.Validacao;
 import com.brasilsoldado.model.Person;
+import com.brasilsoldado.model.City;
 import com.brasilsoldado.view.ViewDashboard;
 import com.brasilsoldado.helpers.CombosDAO;
+import java.util.Base64;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author joaopedro
- */
-public class ViewPersonCreate extends javax.swing.JFrame {
+public class ViewPersonUpdate extends javax.swing.JFrame {
 
     final CombosDAO combo = new CombosDAO();
     final PersonController personController = new PersonController();
+    final CityController cityController = new CityController();
+    Person person;
 
     /**
-     * Creates new form ViewPersonCreate
+     * Creates new form ViewPersonUpdate
      */
-    public ViewPersonCreate() {
+    public ViewPersonUpdate() {
         initComponents();
         combo.popularCombo("state", "idstate", "name", fkStateId, "");
         Formatacao.formatarData(this.personBirthday);
         Formatacao.formatarCpf(this.personCpf);
+    }
+
+    public ViewPersonUpdate(String email) {
+        initComponents();
+        
+        Base64.Decoder decoder = Base64.getDecoder();
+
+        person = this.personController.show(email);
+        City city = this.cityController.show(person.getFkCityId());
+        combo.popularCombo("state", "idstate", "name", fkStateId, "");
+        combo.popularCombo("city", "idcity", "name", fkCityId, " WHERE idcity = " + person.getFkCityId());
+        this.fkStateId.setSelectedIndex(city.getFkStateId());
+        Formatacao.formatarData(this.personBirthday);
+        Formatacao.formatarCpf(this.personCpf);
+        
+        this.personName.setText(person.getName());
+        this.personSurname.setText(person.getSurname());
+        this.personBirthday.setText(Formatacao.ajustaDataDMA(person.getBirthday()+""));
+        this.personCpf.setText(person.getCpf());
+        this.personEmail.setText(person.getEmail());
+        this.personPassword.setText(new String(Base64.getDecoder().decode(person.getPassword())));
+        this.personMothersName.setText(person.getMomsName());
+        this.personFathersName.setText(person.getDadsName());
     }
 
     /**
@@ -65,7 +89,7 @@ public class ViewPersonCreate extends javax.swing.JFrame {
         fkStateId = new javax.swing.JComboBox<>();
         personFathersName = new javax.swing.JTextField();
         personMothersName = new javax.swing.JTextField();
-        personPassword = new javax.swing.JPasswordField();
+        personPassword = new javax.swing.JTextField();
         btnSend = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -203,7 +227,6 @@ public class ViewPersonCreate extends javax.swing.JFrame {
         personMothersName.setMinimumSize(new java.awt.Dimension(10, 35));
         personMothersName.setPreferredSize(new java.awt.Dimension(28, 35));
 
-        personPassword.setPreferredSize(new java.awt.Dimension(28, 35));
         personPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 personPasswordActionPerformed(evt);
@@ -225,20 +248,23 @@ public class ViewPersonCreate extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(personPassword, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(personMothersName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(personFathersName, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(personBirthday, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(personEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(personEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(personName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(personSurname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(personCpf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(personCpf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(personPassword, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(personFathersName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(45, 45, 45))))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {fkCityId, fkStateId, personFathersName});
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {personEmail, personPassword});
 
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,9 +278,9 @@ public class ViewPersonCreate extends javax.swing.JFrame {
                 .addComponent(personCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(personEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(personPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
+                .addComponent(personPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(personMothersName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(personFathersName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -262,10 +288,12 @@ public class ViewPersonCreate extends javax.swing.JFrame {
                 .addComponent(fkStateId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(fkCityId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 7, Short.MAX_VALUE))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {fkCityId, fkStateId, personFathersName});
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {personEmail, personPassword});
 
         btnSend.setText("Enviar Dados");
         btnSend.addActionListener(new java.awt.event.ActionListener() {
@@ -316,18 +344,25 @@ public class ViewPersonCreate extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 716, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 49, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void fkStateIdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fkStateIdItemStateChanged
+
+    }//GEN-LAST:event_fkStateIdItemStateChanged
+
+    private void fkStateIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fkStateIdActionPerformed
+        combo.popularCombo("city", "idcity", "name", fkCityId, " WHERE fkstateid = " + this.fkStateId.getSelectedIndex());
+    }//GEN-LAST:event_fkStateIdActionPerformed
+
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
         try {
-            Person person = new Person();
             boolean response = false;
             ComboItem item = (ComboItem) this.fkCityId.getSelectedItem();
-            
+
             if (Validacao.notNull(this.personName.getText())
                     && Validacao.notNull(this.personSurname.getText())
                     && Validacao.notNull(this.personBirthday.getText())
@@ -341,13 +376,11 @@ public class ViewPersonCreate extends javax.swing.JFrame {
                 person.setCpf(Formatacao.removerFormatacao(this.personCpf.getText()));
                 person.setEmail(this.personEmail.getText());
                 person.setPassword(this.personPassword.getText());
-                person.setType(1);
-                person.setEnabled(true);
                 person.setMomsName(this.personMothersName.getText());
                 person.setDadsName(this.personFathersName.getText());
                 person.setFkCityId(item.getCodigo());
-                
-                response = this.personController.store(person);
+
+                response = this.personController.update(person, person.getIdPerson());
                 System.out.println(response);
 
                 if (response) {
@@ -375,14 +408,6 @@ public class ViewPersonCreate extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSendActionPerformed
 
-    private void fkStateIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fkStateIdActionPerformed
-        combo.popularCombo("city", "idcity", "name", fkCityId, " WHERE fkstateid = " + this.fkStateId.getSelectedIndex());
-    }//GEN-LAST:event_fkStateIdActionPerformed
-
-    private void fkStateIdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fkStateIdItemStateChanged
-
-    }//GEN-LAST:event_fkStateIdItemStateChanged
-
     private void personPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_personPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_personPasswordActionPerformed
@@ -404,20 +429,20 @@ public class ViewPersonCreate extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewPersonCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPersonUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewPersonCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPersonUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewPersonCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPersonUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewPersonCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPersonUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewPersonCreate().setVisible(true);
+                new ViewPersonUpdate().setVisible(true);
             }
         });
     }
@@ -446,7 +471,7 @@ public class ViewPersonCreate extends javax.swing.JFrame {
     private javax.swing.JTextField personFathersName;
     private javax.swing.JTextField personMothersName;
     private javax.swing.JTextField personName;
-    private javax.swing.JPasswordField personPassword;
+    private javax.swing.JTextField personPassword;
     private javax.swing.JTextField personSurname;
     // End of variables declaration//GEN-END:variables
 }

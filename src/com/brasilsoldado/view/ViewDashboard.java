@@ -7,27 +7,45 @@ package com.brasilsoldado.view;
 
 import com.brasilsoldado.controller.PersonController;
 import com.brasilsoldado.model.Person;
+import com.brasilsoldado.helpers.Formatacao;
+import com.brasilsoldado.view.person.ViewPersonUpdate;
 
 /**
  *
  * @author joaopedro
  */
 public class ViewDashboard extends javax.swing.JFrame {
-    
-    final PersonController personController = new PersonController();
 
-    public ViewDashboard(){
+    final PersonController personController = new PersonController();
+    Person person;
+
+    public ViewDashboard() {
         initComponents();
     }
-    
+
     /**
      * Creates new form ViewDashboard
+     *
      * @param email
      */
     public ViewDashboard(String email) {
-        Person person = this.personController.show(email);
+        person = this.personController.show(email);
         initComponents();
-        this.welcome.setText("Bem Vindo, " + person.getName());
+        this.welcome.setText("Bem Vindo, " + person.getName() + "!");
+        this.name.setText("Nome: " + person.getName());
+        this.surname.setText("Sobrenome: " + person.getSurname());
+        this.birthday.setText("Data de Nascimento: " + Formatacao.ajustaDataDMA(person.getBirthday() + ""));
+        this.cpf.setText("CPF: " + person.getCpf());
+        this.mothersName.setText("Nome da Mãe: " + person.getMomsName());
+        this.fathersName.setText("Nome do Pai: " + person.getDadsName());
+        switch (person.getType()) {
+            case 1:
+                this.type.setText("Situação: Alistado");
+                break;
+            case 777:
+                this.type.setText("Situação: Capitão");
+                break;
+        }
     }
 
     /**
@@ -41,6 +59,14 @@ public class ViewDashboard extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         welcome = new javax.swing.JLabel();
+        name = new javax.swing.JLabel();
+        surname = new javax.swing.JLabel();
+        cpf = new javax.swing.JLabel();
+        birthday = new javax.swing.JLabel();
+        type = new javax.swing.JLabel();
+        mothersName = new javax.swing.JLabel();
+        fathersName = new javax.swing.JLabel();
+        update = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,23 +76,85 @@ public class ViewDashboard extends javax.swing.JFrame {
         welcome.setFont(new java.awt.Font("Ubuntu", 1, 36)); // NOI18N
         welcome.setForeground(new java.awt.Color(254, 254, 254));
         welcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        welcome.setText("Bem Vindo!");
+        welcome.setText("Bem Vindo João Pedro!");
+
+        name.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        name.setForeground(new java.awt.Color(254, 254, 254));
+        name.setText("- Nome: João Pedro");
+
+        surname.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        surname.setForeground(new java.awt.Color(254, 254, 254));
+        surname.setText("- Sobrenome: Basso Audibert");
+
+        cpf.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        cpf.setForeground(new java.awt.Color(254, 254, 254));
+        cpf.setText("- CPF: 026.890.330-11");
+
+        birthday.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        birthday.setForeground(new java.awt.Color(254, 254, 254));
+        birthday.setText("- Data de Nascimento: 16/05/2001");
+
+        type.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        type.setForeground(new java.awt.Color(254, 254, 254));
+        type.setText("- SItuação: Alistado");
+
+        mothersName.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        mothersName.setForeground(new java.awt.Color(254, 254, 254));
+        mothersName.setText("- Nome da Mãe: Adriana Basso Audibert");
+
+        fathersName.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        fathersName.setForeground(new java.awt.Color(254, 254, 254));
+        fathersName.setText("- Nome do Pai: Edson Audibert");
+
+        update.setText("Editar Informações");
+        update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(249, Short.MAX_VALUE)
-                .addComponent(welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(241, 241, 241))
+            .addComponent(welcome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(77, 77, 77)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(name)
+                        .addGap(246, 246, 246)
+                        .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(surname)
+                    .addComponent(birthday)
+                    .addComponent(cpf)
+                    .addComponent(type)
+                    .addComponent(mothersName)
+                    .addComponent(fathersName))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(513, Short.MAX_VALUE))
+                .addGap(39, 39, 39)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(name)
+                    .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
+                .addComponent(surname)
+                .addGap(41, 41, 41)
+                .addComponent(birthday)
+                .addGap(41, 41, 41)
+                .addComponent(cpf)
+                .addGap(41, 41, 41)
+                .addComponent(type)
+                .addGap(41, 41, 41)
+                .addComponent(mothersName)
+                .addGap(41, 41, 41)
+                .addComponent(fathersName)
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -79,13 +167,16 @@ public class ViewDashboard extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        new ViewPersonUpdate("joaopedro.audibert@gmail.com").setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_updateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,7 +214,15 @@ public class ViewDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel birthday;
+    private javax.swing.JLabel cpf;
+    private javax.swing.JLabel fathersName;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel mothersName;
+    private javax.swing.JLabel name;
+    private javax.swing.JLabel surname;
+    private javax.swing.JLabel type;
+    private javax.swing.JButton update;
     private javax.swing.JLabel welcome;
     // End of variables declaration//GEN-END:variables
 }

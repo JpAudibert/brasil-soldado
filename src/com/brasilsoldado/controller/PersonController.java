@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,7 +85,7 @@ public class PersonController implements IBasicController<Person> {
         }
         return person;
     }
-    
+
     public Person show(String email) {
         Person person = null;
         try {
@@ -93,8 +94,9 @@ public class PersonController implements IBasicController<Person> {
                     .getConnection()
                     .createStatement();
 
-            String query = " SELECT * FROM person WHERE email = " + email;
+            String query = " SELECT * FROM person WHERE email = '" + email + "'";
 
+            System.out.println(query);
             result = stmt.executeQuery(query);
 
             if (result.next()) {
@@ -165,8 +167,6 @@ public class PersonController implements IBasicController<Person> {
                     + "birthday = '" + person.getBirthday() + "',"
                     + "cpf = '" + person.getCpf() + "',"
                     + "email = '" + person.getEmail() + "',"
-                    + "type = '" + person.getType() + "',"
-                    + "enabled = '" + person.isEnabled() + "',"
                     + "momsname = '" + person.getMomsName() + "',"
                     + "dadsname = '" + person.getDadsName() + "',"
                     + "fkcityid = '" + person.getFkCityId() + "',"

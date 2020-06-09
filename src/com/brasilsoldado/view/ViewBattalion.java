@@ -400,7 +400,6 @@ public class ViewBattalion extends javax.swing.JFrame {
 
             this.qttmembers.setText(battalion.getQttMembers() + "");
             combo.popularCombo("state", "idstate", "name", this.fkStateId, "");
-            combo.popularCombo("state", "idstate", "name", this.fkStateId, "");
             this.fkStateId.setSelectedIndex(city.getFkStateId());
             this.fkCityId.setSelectedIndex(battalion.getFkCityId());
 
