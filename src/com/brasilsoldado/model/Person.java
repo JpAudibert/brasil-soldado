@@ -86,8 +86,6 @@ public class Person {
     }
 
     public String getPassword() {
-        Base64.Decoder decoder = Base64.getDecoder();
-        String password = new String(decoder.decode(this.password));
         return password;
     }
 

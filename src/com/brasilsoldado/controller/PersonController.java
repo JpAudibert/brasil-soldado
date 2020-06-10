@@ -72,7 +72,7 @@ public class PersonController implements IBasicController<Person> {
                 person.setBirthday(result.getDate("birthday"));
                 person.setCpf(result.getString("cpf"));
                 person.setEmail(result.getString("email"));
-                person.setPassword(result.getString("password"));
+                person.setPassword(new String(Base64.getDecoder().decode(result.getString("password"))));
                 person.setType(result.getInt("type"));
                 person.setEnabled(result.getBoolean("enabled"));
                 person.setMomsName(result.getString("momsname"));
@@ -107,7 +107,7 @@ public class PersonController implements IBasicController<Person> {
                 person.setBirthday(result.getDate("birthday"));
                 person.setCpf(result.getString("cpf"));
                 person.setEmail(result.getString("email"));
-                person.setPassword(result.getString("password"));
+                person.setPassword(new String(Base64.getDecoder().decode(result.getString("password"))));
                 person.setType(result.getInt("type"));
                 person.setEnabled(result.getBoolean("enabled"));
                 person.setMomsName(result.getString("momsname"));

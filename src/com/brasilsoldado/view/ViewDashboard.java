@@ -6,9 +6,18 @@
 package com.brasilsoldado.view;
 
 import com.brasilsoldado.controller.PersonController;
+import com.brasilsoldado.helpers.DBConnection;
 import com.brasilsoldado.model.Person;
 import com.brasilsoldado.helpers.Formatacao;
 import com.brasilsoldado.view.person.ViewPersonUpdate;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -18,6 +27,7 @@ public class ViewDashboard extends javax.swing.JFrame {
 
     final PersonController personController = new PersonController();
     Person person;
+    String email;
 
     public ViewDashboard() {
         initComponents();
@@ -29,6 +39,7 @@ public class ViewDashboard extends javax.swing.JFrame {
      * @param email
      */
     public ViewDashboard(String email) {
+        this.email = email;
         person = this.personController.show(email);
         initComponents();
         this.welcome.setText("Bem Vindo, " + person.getName() + "!");
@@ -41,9 +52,11 @@ public class ViewDashboard extends javax.swing.JFrame {
         switch (person.getType()) {
             case 1:
                 this.type.setText("Situação: Alistado");
+                this.reports.setVisible(false);
                 break;
             case 777:
                 this.type.setText("Situação: Capitão");
+                this.reports.setVisible(true);
                 break;
         }
     }
@@ -57,6 +70,7 @@ public class ViewDashboard extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenu3 = new javax.swing.JMenu();
         jPanel1 = new javax.swing.JPanel();
         welcome = new javax.swing.JLabel();
         name = new javax.swing.JLabel();
@@ -67,6 +81,21 @@ public class ViewDashboard extends javax.swing.JFrame {
         mothersName = new javax.swing.JLabel();
         fathersName = new javax.swing.JLabel();
         update = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        warningMenu = new javax.swing.JMenuItem();
+        battalionMenu = new javax.swing.JMenuItem();
+        cityMenu = new javax.swing.JMenuItem();
+        stateMenu = new javax.swing.JMenuItem();
+        qualificationMenu = new javax.swing.JMenuItem();
+        reports = new javax.swing.JMenu();
+        reportBattalion = new javax.swing.JMenuItem();
+        enlistedReport = new javax.swing.JMenuItem();
+        reportAdmPerState = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+
+        jMenu3.setText("jMenu3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -76,23 +105,23 @@ public class ViewDashboard extends javax.swing.JFrame {
         welcome.setFont(new java.awt.Font("Ubuntu", 1, 36)); // NOI18N
         welcome.setForeground(new java.awt.Color(254, 254, 254));
         welcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        welcome.setText("Bem Vindo João Pedro!");
+        welcome.setText("Bem Vindo <NOME>!");
 
         name.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         name.setForeground(new java.awt.Color(254, 254, 254));
-        name.setText("- Nome: João Pedro");
+        name.setText("- Nome: dados");
 
         surname.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         surname.setForeground(new java.awt.Color(254, 254, 254));
-        surname.setText("- Sobrenome: Basso Audibert");
+        surname.setText("- Sobrenome: dados");
 
         cpf.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         cpf.setForeground(new java.awt.Color(254, 254, 254));
-        cpf.setText("- CPF: 026.890.330-11");
+        cpf.setText("- CPF: dados");
 
         birthday.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         birthday.setForeground(new java.awt.Color(254, 254, 254));
-        birthday.setText("- Data de Nascimento: 16/05/2001");
+        birthday.setText("- Data de Nascimento: dados");
 
         type.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         type.setForeground(new java.awt.Color(254, 254, 254));
@@ -100,16 +129,23 @@ public class ViewDashboard extends javax.swing.JFrame {
 
         mothersName.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         mothersName.setForeground(new java.awt.Color(254, 254, 254));
-        mothersName.setText("- Nome da Mãe: Adriana Basso Audibert");
+        mothersName.setText("- Nome da Mãe: dados");
 
         fathersName.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         fathersName.setForeground(new java.awt.Color(254, 254, 254));
-        fathersName.setText("- Nome do Pai: Edson Audibert");
+        fathersName.setText("- Nome do Pai: dados");
 
         update.setText("Editar Informações");
         update.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 updateActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Fechar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -121,17 +157,18 @@ public class ViewDashboard extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(77, 77, 77)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(name)
-                        .addGap(246, 246, 246)
-                        .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(surname)
-                    .addComponent(birthday)
-                    .addComponent(cpf)
+                    .addComponent(name)
                     .addComponent(type)
                     .addComponent(mothersName)
-                    .addComponent(fathersName))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addComponent(fathersName)
+                    .addComponent(surname)
+                    .addComponent(birthday)
+                    .addComponent(cpf))
+                .addGap(92, 92, 92)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(133, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,42 +178,193 @@ public class ViewDashboard extends javax.swing.JFrame {
                 .addGap(39, 39, 39)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(name)
-                    .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                    .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
                 .addComponent(surname)
                 .addGap(41, 41, 41)
                 .addComponent(birthday)
-                .addGap(41, 41, 41)
+                .addGap(35, 35, 35)
                 .addComponent(cpf)
                 .addGap(41, 41, 41)
                 .addComponent(type)
                 .addGap(41, 41, 41)
                 .addComponent(mothersName)
                 .addGap(41, 41, 41)
-                .addComponent(fathersName)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fathersName)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
+
+        jMenu1.setText("Páginas");
+
+        warningMenu.setText("Avisos");
+        warningMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                warningMenuActionPerformed(evt);
+            }
+        });
+        jMenu1.add(warningMenu);
+
+        battalionMenu.setText("Batalhões");
+        battalionMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                battalionMenuActionPerformed(evt);
+            }
+        });
+        jMenu1.add(battalionMenu);
+
+        cityMenu.setText("Cidades");
+        cityMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cityMenuActionPerformed(evt);
+            }
+        });
+        jMenu1.add(cityMenu);
+
+        stateMenu.setText("Estados");
+        stateMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stateMenuActionPerformed(evt);
+            }
+        });
+        jMenu1.add(stateMenu);
+
+        qualificationMenu.setText("Qualificações");
+        qualificationMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                qualificationMenuActionPerformed(evt);
+            }
+        });
+        jMenu1.add(qualificationMenu);
+
+        jMenuBar1.add(jMenu1);
+
+        reports.setText("Relatórios");
+
+        reportBattalion.setText("Batalhões");
+        reportBattalion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportBattalionActionPerformed(evt);
+            }
+        });
+        reports.add(reportBattalion);
+
+        enlistedReport.setText("Alistados");
+        enlistedReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enlistedReportActionPerformed(evt);
+            }
+        });
+        reports.add(enlistedReport);
+
+        reportAdmPerState.setText("Administradores de Batalhões por Estado");
+        reportAdmPerState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportAdmPerStateActionPerformed(evt);
+            }
+        });
+        reports.add(reportAdmPerState);
+
+        jMenuItem1.setText("Lista de Chamada por Cidade");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        reports.add(jMenuItem1);
+
+        jMenuBar1.add(reports);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 824, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        new ViewPersonUpdate("joaopedro.audibert@gmail.com").setVisible(true);
+        new ViewPersonUpdate(email).setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_updateActionPerformed
+
+    private void battalionMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_battalionMenuActionPerformed
+        new ViewBattalion(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_battalionMenuActionPerformed
+
+    private void cityMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cityMenuActionPerformed
+        new ViewCity(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_cityMenuActionPerformed
+
+    private void qualificationMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qualificationMenuActionPerformed
+        new ViewQualification(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_qualificationMenuActionPerformed
+
+    private void stateMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stateMenuActionPerformed
+        new ViewState(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_stateMenuActionPerformed
+
+    private void warningMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_warningMenuActionPerformed
+        new ViewWarning(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_warningMenuActionPerformed
+
+    private void reportBattalionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportBattalionActionPerformed
+        try {
+            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/com/brasilsoldado/reports/listBattalion.jrxml"));
+
+            Map params = new HashMap();
+
+            JasperPrint press = JasperFillManager.fillReport(report, params, DBConnection.getInstance().getConnection());
+
+            JasperViewer.viewReport(press, false);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao gerar relatorio: " + e);
+        }
+    }//GEN-LAST:event_reportBattalionActionPerformed
+
+    private void enlistedReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enlistedReportActionPerformed
+        try {
+            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/com/brasilsoldado/reports/listPeopleEnlisted.jrxml"));
+
+            Map params = new HashMap();
+
+            JasperPrint press = JasperFillManager.fillReport(report, params, DBConnection.getInstance().getConnection());
+
+            JasperViewer.viewReport(press, false);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao gerar relatorio: " + e);
+        }
+    }//GEN-LAST:event_enlistedReportActionPerformed
+
+    private void reportAdmPerStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportAdmPerStateActionPerformed
+        new ViewReportStateBattalion(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_reportAdmPerStateActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JOptionPane.showMessageDialog(null, "Fechar a aplicacao?");
+        this.setVisible(false);
+        System.exit(0);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        new ViewReportPeopleCity(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -214,15 +402,29 @@ public class ViewDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem battalionMenu;
     private javax.swing.JLabel birthday;
+    private javax.swing.JMenuItem cityMenu;
     private javax.swing.JLabel cpf;
+    private javax.swing.JMenuItem enlistedReport;
     private javax.swing.JLabel fathersName;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel mothersName;
     private javax.swing.JLabel name;
+    private javax.swing.JMenuItem qualificationMenu;
+    private javax.swing.JMenuItem reportAdmPerState;
+    private javax.swing.JMenuItem reportBattalion;
+    private javax.swing.JMenu reports;
+    private javax.swing.JMenuItem stateMenu;
     private javax.swing.JLabel surname;
     private javax.swing.JLabel type;
     private javax.swing.JButton update;
+    private javax.swing.JMenuItem warningMenu;
     private javax.swing.JLabel welcome;
     // End of variables declaration//GEN-END:variables
 }

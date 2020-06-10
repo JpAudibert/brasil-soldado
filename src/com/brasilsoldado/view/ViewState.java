@@ -18,12 +18,19 @@ public class ViewState extends javax.swing.JFrame {
 
     final StateController stateController = new StateController();
     int id = 0;
+    String email;
 
     /**
      * Creates new form ViewState
      */
     public ViewState() {
         initComponents();
+        this.stateController.popularTabelaXXX(indexTable, "");
+    }
+    
+    public ViewState(String email) {
+        initComponents();
+        this.email = email;
         this.stateController.popularTabelaXXX(indexTable, "");
     }
 
@@ -47,6 +54,7 @@ public class ViewState extends javax.swing.JFrame {
         initials = new javax.swing.JTextField();
         warning = new javax.swing.JLabel();
         submit = new javax.swing.JButton();
+        back = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -91,6 +99,14 @@ public class ViewState extends javax.swing.JFrame {
             }
         });
 
+        back.setText("Voltar");
+        back.setMaximumSize(new java.awt.Dimension(52, 35));
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -115,13 +131,18 @@ public class ViewState extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 766, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(306, 306, 306)
-                        .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 14, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(63, 63, 63)
+                .addGap(18, 18, 18)
+                .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(78, 78, 78)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -376,6 +397,11 @@ public class ViewState extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_criteriaActionPerformed
 
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        new ViewDashboard(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_backActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -412,6 +438,7 @@ public class ViewState extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private javax.swing.JTextField criteria;
     private javax.swing.JButton delete;
     private javax.swing.JTable indexTable;

@@ -18,12 +18,19 @@ public class ViewQualification extends javax.swing.JFrame {
 
     final QualificationController qualificationController = new QualificationController();
     int id = 0;
-    
+    String email;
+
     /**
      * Creates new form ViewQualification
      */
     public ViewQualification() {
         initComponents();
+        this.qualificationController.popularTabelaXXX(indexTable, "");
+    }
+
+    public ViewQualification(String email) {
+        initComponents();
+        this.email = email;
         this.qualificationController.popularTabelaXXX(indexTable, "");
     }
 
@@ -45,6 +52,7 @@ public class ViewQualification extends javax.swing.JFrame {
         type = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         submit = new javax.swing.JButton();
+        back = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -58,7 +66,6 @@ public class ViewQualification extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 600));
         setResizable(false);
 
         jPanel6.setBackground(new java.awt.Color(57, 128, 65));
@@ -93,6 +100,14 @@ public class ViewQualification extends javax.swing.JFrame {
             }
         });
 
+        back.setText("Voltar");
+        back.setMaximumSize(new java.awt.Dimension(52, 35));
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -113,11 +128,17 @@ public class ViewQualification extends javax.swing.JFrame {
                         .addGap(36, 36, 36)
                         .addComponent(type, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(94, 94, 94)
+                .addGap(27, 27, 27)
+                .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(77, 77, 77)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -330,10 +351,10 @@ public class ViewQualification extends javax.swing.JFrame {
         String idString = String.valueOf(indexTable.getValueAt(indexTable.getSelectedRow(), 0));
         int idDelete = Integer.parseInt(idString);
 
-        if(this.qualificationController.delete(idDelete)){
+        if (this.qualificationController.delete(idDelete)) {
             JOptionPane.showMessageDialog(null, "Registro excluído com sucesso!");
             this.qualificationController.popularTabelaXXX(indexTable, "");
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Problemas ao excluir registro.");
         }
     }//GEN-LAST:event_deleteActionPerformed
@@ -369,6 +390,11 @@ public class ViewQualification extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios.");
         }
     }//GEN-LAST:event_submitActionPerformed
+
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        new ViewDashboard(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_backActionPerformed
 
     /**
      * @param args the command line arguments
@@ -406,6 +432,7 @@ public class ViewQualification extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private javax.swing.JTextField criteria;
     private javax.swing.JButton delete;
     private javax.swing.JTable indexTable;

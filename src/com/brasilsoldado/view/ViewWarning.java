@@ -18,12 +18,19 @@ public class ViewWarning extends javax.swing.JFrame {
 
     final WarningController warningController = new WarningController();
     int id = 0;
+    String email;
 
     /**
      * Creates new form ViewWarning
      */
     public ViewWarning() {
         initComponents();
+        this.warningController.popularTabelaXXX(indexTable, "");
+    }
+
+    public ViewWarning(String email) {
+        initComponents();
+        this.email = email;
         this.warningController.popularTabelaXXX(indexTable, "");
     }
 
@@ -49,6 +56,7 @@ public class ViewWarning extends javax.swing.JFrame {
         submit1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         message = new javax.swing.JTextArea();
+        back = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -109,6 +117,14 @@ public class ViewWarning extends javax.swing.JFrame {
         message.setRows(5);
         jScrollPane2.setViewportView(message);
 
+        back.setText("Voltar");
+        back.setMaximumSize(new java.awt.Dimension(52, 35));
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -131,7 +147,10 @@ public class ViewWarning extends javax.swing.JFrame {
                             .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 764, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 764, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
@@ -140,7 +159,9 @@ public class ViewWarning extends javax.swing.JFrame {
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(23, 23, 23)
+                .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -154,7 +175,7 @@ public class ViewWarning extends javax.swing.JFrame {
                 .addComponent(warning1)
                 .addGap(66, 66, 66)
                 .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(161, Short.MAX_VALUE))
+                .addContainerGap(123, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -507,6 +528,11 @@ public class ViewWarning extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_titleShowActionPerformed
 
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        new ViewDashboard(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_backActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -548,6 +574,7 @@ public class ViewWarning extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private javax.swing.JTextField criteria;
     private javax.swing.JButton delete;
     private javax.swing.JTable indexTable;

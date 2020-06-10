@@ -24,12 +24,20 @@ public class ViewBattalion extends javax.swing.JFrame {
     final BattalionController battalionController = new BattalionController();
     final CombosDAO combo = new CombosDAO();
     int id = 0;
+    String email;
 
     /**
      * Creates new form ViewBattalion
      */
     public ViewBattalion() {
         initComponents();
+        combo.popularComboConcat("person", "idperson", "name", " ", "surname", this.responsible, "WHERE type = 777");
+        combo.popularCombo("state", "idstate", "name", this.fkStateId, "");
+    }
+    
+    public ViewBattalion(String email) {
+        initComponents();
+        this.email = email;
         combo.popularComboConcat("person", "idperson", "name", " ", "surname", this.responsible, "WHERE type = 777");
         combo.popularCombo("state", "idstate", "name", this.fkStateId, "");
     }
@@ -58,6 +66,7 @@ public class ViewBattalion extends javax.swing.JFrame {
         responsible = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         fkCityId = new javax.swing.JComboBox<>();
+        back = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -121,17 +130,18 @@ public class ViewBattalion extends javax.swing.JFrame {
 
         fkCityId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        back.setText("Voltar");
+        back.setMaximumSize(new java.awt.Dimension(52, 35));
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 766, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(297, 297, 297)
-                        .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 14, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,6 +161,16 @@ public class ViewBattalion extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                         .addComponent(warning, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48))))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 766, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(297, 297, 297)
+                        .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 14, Short.MAX_VALUE))
         );
 
         jPanel6Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {fkCityId, fkStateId, qttmembers, responsible});
@@ -158,7 +178,9 @@ public class ViewBattalion extends javax.swing.JFrame {
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(63, 63, 63)
+                .addContainerGap()
+                .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(78, 78, 78)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -355,15 +377,58 @@ public class ViewBattalion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void criteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criteriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_criteriaActionPerformed
+
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        String idString = String.valueOf(indexTable.getValueAt(indexTable.getSelectedRow(), 0));
+        int idDelete = Integer.parseInt(idString);
+
+        if (this.battalionController.delete(idDelete)) {
+            JOptionPane.showMessageDialog(null, "Registro excluído com sucesso!");
+            this.battalionController.popularTabelaXXX(indexTable, "");
+        } else {
+            JOptionPane.showMessageDialog(null, "Problemas ao excluir registro.");
+        }
+    }//GEN-LAST:event_deleteActionPerformed
+
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        String idString = String.valueOf(indexTable.getValueAt(indexTable.getSelectedRow(), 0));
+        id = Integer.parseInt(idString);
+
+        Battalion battalion = this.battalionController.show(id);
+        City city = new CityController().show(battalion.getFkCityId());
+        if (battalion != null) {
+
+            this.qttmembers.setText(battalion.getQttMembers() + "");
+            combo.popularCombo("state", "idstate", "name", this.fkStateId, "");
+            this.fkStateId.setSelectedIndex(city.getFkStateId());
+            this.fkCityId.setSelectedIndex(battalion.getFkCityId());
+
+            this.jTabbedPane1.setSelectedIndex(0);
+
+            this.qttmembers.requestFocus();
+        }
+    }//GEN-LAST:event_updateActionPerformed
+
+    private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
+        this.battalionController.popularTabelaXXX(indexTable, this.criteria.getText());
+    }//GEN-LAST:event_searchActionPerformed
+
+    private void fkStateIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fkStateIdActionPerformed
+        combo.popularCombo("city", "idcity", "name", fkCityId, " WHERE fkstateid = " + this.fkStateId.getSelectedIndex());
+    }//GEN-LAST:event_fkStateIdActionPerformed
+
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         Battalion battalion = new Battalion();
         boolean response = false;
         ComboItem responsibleItem = (ComboItem) this.responsible.getSelectedItem();
         ComboItem fkCityIdItem = (ComboItem) this.fkCityId.getSelectedItem();
-        if (Validacao.notNull(this.qttmembers.getText()) 
-                && Integer.parseInt(this.qttmembers.getText()) > 0 
-                && fkCityIdItem.getCodigo() != 0 
-                && responsibleItem.getCodigo() != 0) {
+        if (Validacao.notNull(this.qttmembers.getText())
+            && Integer.parseInt(this.qttmembers.getText()) > 0
+            && fkCityIdItem.getCodigo() != 0
+            && responsibleItem.getCodigo() != 0) {
             battalion.setQttMembers(Integer.parseInt(this.qttmembers.getText()));
             battalion.setIdPersonResponsible(responsibleItem.getCodigo());
             battalion.setFkCityId(fkCityIdItem.getCodigo());
@@ -386,48 +451,10 @@ public class ViewBattalion extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_submitActionPerformed
 
-    private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
-        this.battalionController.popularTabelaXXX(indexTable, this.criteria.getText());
-    }//GEN-LAST:event_searchActionPerformed
-
-    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        String idString = String.valueOf(indexTable.getValueAt(indexTable.getSelectedRow(), 0));
-        id = Integer.parseInt(idString);
-
-        Battalion battalion = this.battalionController.show(id);
-        City city = new CityController().show(battalion.getFkCityId());
-        if (battalion != null) {
-
-            this.qttmembers.setText(battalion.getQttMembers() + "");
-            combo.popularCombo("state", "idstate", "name", this.fkStateId, "");
-            this.fkStateId.setSelectedIndex(city.getFkStateId());
-            this.fkCityId.setSelectedIndex(battalion.getFkCityId());
-
-            this.jTabbedPane1.setSelectedIndex(0);
-
-            this.qttmembers.requestFocus();
-        }
-    }//GEN-LAST:event_updateActionPerformed
-
-    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        String idString = String.valueOf(indexTable.getValueAt(indexTable.getSelectedRow(), 0));
-        int idDelete = Integer.parseInt(idString);
-
-        if (this.battalionController.delete(idDelete)) {
-            JOptionPane.showMessageDialog(null, "Registro excluído com sucesso!");
-            this.battalionController.popularTabelaXXX(indexTable, "");
-        } else {
-            JOptionPane.showMessageDialog(null, "Problemas ao excluir registro.");
-        }
-    }//GEN-LAST:event_deleteActionPerformed
-
-    private void criteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criteriaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_criteriaActionPerformed
-
-    private void fkStateIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fkStateIdActionPerformed
-        combo.popularCombo("city", "idcity", "name", fkCityId, " WHERE fkstateid = " + this.fkStateId.getSelectedIndex());
-    }//GEN-LAST:event_fkStateIdActionPerformed
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        new ViewDashboard(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_backActionPerformed
 
     /**
      * @param args the command line arguments
@@ -465,6 +492,7 @@ public class ViewBattalion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private javax.swing.JTextField criteria;
     private javax.swing.JButton delete;
     private javax.swing.JComboBox<String> fkCityId;
