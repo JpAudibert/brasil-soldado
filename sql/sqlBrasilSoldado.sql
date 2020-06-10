@@ -1,5 +1,6 @@
 CREATE TABLE "warning" (
 	idWarning SERIAL,
+	title VARCHAR(100) NOT NULL,
 	message TEXT NOT NULL,
 	
 	CONSTRAINT pk_warning PRIMARY KEY(idWarning)
@@ -43,7 +44,7 @@ CREATE TABLE "person" (
 	surname VARCHAR(60) NOT NULL,
 	birthday DATE NOT NULL,
 	cpf VARCHAR(11) NOT NULL,
-	email VARCHAR(100) NOT NULL,
+	email VARCHAR(100) NOT NULL UNIQUE,
 	password VARCHAR(100) NOT NULL,
 	type INT NOT NULL,
 	enabled BOOLEAN NOT NULL,
