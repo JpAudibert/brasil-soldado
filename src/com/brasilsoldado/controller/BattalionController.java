@@ -105,7 +105,7 @@ public class BattalionController implements IBasicController<Battalion> {
                     + "qttmembers = '" + battalion.getQttMembers() + "',"
                     + "idpersonresponsible = '" + battalion.getIdPersonResponsible() + "',"
                     + "fkcityid = '" + battalion.getFkCityId() + "' "
-                    + "WHERE battalion = " + id;
+                    + "WHERE idbattalion = " + id;
 
             System.out.println(query);
             stmt.execute(query);
