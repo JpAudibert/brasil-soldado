@@ -6,9 +6,12 @@
 package com.brasilsoldado.view;
 
 import com.brasilsoldado.controller.InspectionController;
+import com.brasilsoldado.controller.PersonController;
+import com.brasilsoldado.controller.QualificationController;
 import com.brasilsoldado.helpers.CombosDAO;
 import com.brasilsoldado.helpers.Validacao;
 import com.brasilsoldado.model.Inspection;
+import com.brasilsoldado.model.Person;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,10 +21,12 @@ import javax.swing.JOptionPane;
 public class ViewInspection extends javax.swing.JFrame {
 
     final InspectionController inspectionController = new InspectionController();
+    final PersonController personController = new PersonController();
+    final QualificationController qualificationController = new QualificationController();
     final CombosDAO combo = new CombosDAO();
     int id = 0;
     String email;
-    String idPerson = "0";
+    int idPerson = 0;
 
     /**
      * Creates new form ViewInspection
@@ -34,11 +39,40 @@ public class ViewInspection extends javax.swing.JFrame {
         initComponents();
         this.email = email;
     }
-    
-    public void setPerson (String id, String name){
+
+    public ViewInspection(String email, boolean isView) {
+        initComponents();
+        this.email = email;
+
+        Person person = this.personController.show(email);
+        Inspection inspectionShow = this.inspectionController.showFkPersonId(person.getIdPerson());
+
+        this.idPerson = person.getIdPerson();
+        this.fkPersonId.setText(person.getName() + " " + person.getSurname());
+        this.headSize.setText(inspectionShow.getHeadSize() + " cm");
+        this.height.setText(inspectionShow.getHeight() + " cm");
+        this.weight.setText(inspectionShow.getWeight() + " kg");
+        this.footSize.setText(inspectionShow.getFootSize() + "");
+        this.weightLifted.setText(inspectionShow.getWeightLifted() + " kg");
+        this.report.setText(inspectionShow.getReport());
+
+        this.healthy.setSelected(inspectionShow.isIsHealthy());
+
+        this.fkPersonId.setEditable(false);
+        this.headSize.setEditable(false);
+        this.height.setEditable(false);
+        this.weight.setEditable(false);
+        this.footSize.setEditable(false);
+        this.weightLifted.setEditable(false);
+        this.healthy.setEnabled(false);
+        this.report.setEditable(false);
+        this.submit1.setVisible(false);
+    }
+
+    public void setPerson(int id, String name) {
         fkPersonId.setText(name);
         idPerson = id;
-        
+
         healthy.requestFocus();
     }
 
@@ -88,12 +122,15 @@ public class ViewInspection extends javax.swing.JFrame {
         jPanel9 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        indexTable = new javax.swing.JTable();
-        search = new javax.swing.JButton();
-        update = new javax.swing.JButton();
-        delete = new javax.swing.JButton();
-        criteria = new javax.swing.JTextField();
+        qualificationsSelected = new javax.swing.JTable();
+        searchQuali = new javax.swing.JButton();
+        addToList = new javax.swing.JButton();
+        qualification = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        removeFromList = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        qualificationsIndex = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1120, 620));
@@ -237,29 +274,6 @@ public class ViewInspection extends javax.swing.JFrame {
                                     .addGap(85, 85, 85)))
                             .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGap(286, 286, 286))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel7Layout.createSequentialGroup()
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(34, 34, 34)
-                                    .addComponent(weightLifted))
-                                .addGroup(jPanel7Layout.createSequentialGroup()
-                                    .addGap(0, 0, Short.MAX_VALUE)
-                                    .addComponent(weight, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGap(33, 33, 33))
-                        .addGroup(jPanel7Layout.createSequentialGroup()
-                            .addGap(0, 0, Short.MAX_VALUE)
-                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel7Layout.createSequentialGroup()
-                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(warning1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(20, 20, 20)))
-                                    .addGap(32, 32, 32)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGap(32, 32, 32))
                         .addGroup(jPanel7Layout.createSequentialGroup()
                             .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -269,10 +283,33 @@ public class ViewInspection extends javax.swing.JFrame {
                                 .addComponent(headSize)
                                 .addComponent(height, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(footSize)
-                            .addGap(33, 33, 33)))))
+                            .addGap(33, 33, 33))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                            .addGap(0, 0, Short.MAX_VALUE)
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(jPanel7Layout.createSequentialGroup()
+                                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(34, 34, 34)
+                                            .addComponent(weightLifted))
+                                        .addComponent(weight, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(33, 33, 33))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel7Layout.createSequentialGroup()
+                                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(warning1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(20, 20, 20)))
+                                            .addGap(32, 32, 32)
+                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGap(32, 32, 32)))))))
         );
 
         jPanel7Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {footSize, jScrollPane2, weight, weightLifted});
@@ -330,9 +367,7 @@ public class ViewInspection extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -344,8 +379,8 @@ public class ViewInspection extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Cadastro", jPanel3);
@@ -358,10 +393,10 @@ public class ViewInspection extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Ubuntu", 1, 48)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(254, 254, 254));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("Brasil! Soldado - Inspeção");
+        jLabel8.setText("Brasil! Soldado - Qualificações");
 
-        indexTable.setForeground(new java.awt.Color(29, 29, 29));
-        indexTable.setModel(new javax.swing.table.DefaultTableModel(
+        qualificationsSelected.setForeground(new java.awt.Color(29, 29, 29));
+        qualificationsSelected.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -372,98 +407,134 @@ public class ViewInspection extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(indexTable);
+        jScrollPane1.setViewportView(qualificationsSelected);
 
-        search.setForeground(new java.awt.Color(53, 53, 53));
-        search.setText("Pesquisar");
-        search.setPreferredSize(new java.awt.Dimension(100, 35));
-        search.addActionListener(new java.awt.event.ActionListener() {
+        searchQuali.setForeground(new java.awt.Color(53, 53, 53));
+        searchQuali.setText("Pesquisar");
+        searchQuali.setPreferredSize(new java.awt.Dimension(100, 35));
+        searchQuali.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchActionPerformed(evt);
+                searchQualiActionPerformed(evt);
             }
         });
 
-        update.setForeground(new java.awt.Color(53, 53, 53));
-        update.setText("Editar");
-        update.addActionListener(new java.awt.event.ActionListener() {
+        addToList.setForeground(new java.awt.Color(53, 53, 53));
+        addToList.setText("Adicionar >>");
+        addToList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateActionPerformed(evt);
+                addToListActionPerformed(evt);
             }
         });
 
-        delete.setForeground(new java.awt.Color(53, 53, 53));
-        delete.setText("Excluir");
-        delete.addActionListener(new java.awt.event.ActionListener() {
+        qualification.setMinimumSize(new java.awt.Dimension(23, 40));
+        qualification.setName(""); // NOI18N
+        qualification.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteActionPerformed(evt);
-            }
-        });
-
-        criteria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                criteriaActionPerformed(evt);
+                qualificationActionPerformed(evt);
             }
         });
 
         jLabel9.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(254, 254, 254));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Digite o nome do alistado para ver sua inspeção:");
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel9.setText("Selecione uma qualificação (código ou nome):");
+
+        removeFromList.setForeground(new java.awt.Color(53, 53, 53));
+        removeFromList.setText("<< Remover");
+        removeFromList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeFromListActionPerformed(evt);
+            }
+        });
+
+        qualificationsIndex.setForeground(new java.awt.Color(29, 29, 29));
+        qualificationsIndex.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        qualificationsIndex.setCellSelectionEnabled(true);
+        jScrollPane3.setViewportView(qualificationsIndex);
+
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(254, 254, 254));
+        jLabel2.setText("Qualificações do Alistado:");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                .addGap(265, 265, 265)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(80, 80, 80)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(104, 104, 104)
-                        .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
-                        .addComponent(criteria, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(319, 319, 319))
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                            .addComponent(qualification, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(33, 33, 33)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(searchQuali, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel2))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(addToList, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(removeFromList, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(42, 42, 42))))
+                    .addComponent(jLabel9)))
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 1098, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jPanel9Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {delete, search, update});
+        jPanel9Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addToList, removeFromList, searchQuali});
 
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addContainerGap()
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(81, 81, 81)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(criteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(update)
-                    .addComponent(delete))
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(71, Short.MAX_VALUE))
+                    .addComponent(qualification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchQuali, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(addToList)
+                        .addGap(18, 18, 18)
+                        .addComponent(removeFromList)))
+                .addContainerGap(238, Short.MAX_VALUE))
         );
 
-        jPanel9Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {delete, search, update});
+        jPanel9Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addToList, removeFromList, searchQuali});
+
+        jPanel9Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jScrollPane1, jScrollPane3});
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 1108, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 1110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -491,7 +562,7 @@ public class ViewInspection extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
         );
 
         pack();
@@ -500,35 +571,54 @@ public class ViewInspection extends javax.swing.JFrame {
     private void submit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit1ActionPerformed
         Inspection inspection = new Inspection();
         boolean response = false;
-        int idSoldier = Integer.parseInt(idPerson);
-        if (Validacao.notNull(this.headSize.getText())
-                && Validacao.notNull(this.height.getText())
-                && Validacao.notNull(this.weight.getText())
-                && Validacao.notNull(this.footSize.getText())
-                && Validacao.notNull(this.report.getText())
-                && idSoldier > 0) {
-            inspection.setHeadSize(Double.parseDouble(this.headSize.getText()));
-            inspection.setHeight(Double.parseDouble(this.height.getText()));
-            inspection.setWeight(Double.parseDouble(this.weight.getText()));
-            inspection.setFootSize(Double.parseDouble(this.footSize.getText()));
-            inspection.setWeightLifted(Double.parseDouble(this.weightLifted.getText()));
-            inspection.setIsHealthy(this.healthy.isSelected());
-            inspection.setReport(this.report.getText());
-            inspection.setFkPersonId(idSoldier);
+        int idSoldier = idPerson;
+//        if (Validacao.notNull(this.headSize.getText())
+//                && Validacao.notNull(this.height.getText())
+//                && Validacao.notNull(this.weight.getText())
+//                && Validacao.notNull(this.footSize.getText())
+//                && Validacao.notNull(this.report.getText())
+//                && idSoldier > 0) {
+        if (true) {
+//            inspection.setHeadSize(Double.parseDouble(this.headSize.getText()));
+//            inspection.setHeight(Double.parseDouble(this.height.getText()));
+//            inspection.setWeight(Double.parseDouble(this.weight.getText()));
+//            inspection.setFootSize(Double.parseDouble(this.footSize.getText()));
+//            inspection.setWeightLifted(Double.parseDouble(this.weightLifted.getText()));
+//            inspection.setIsHealthy(this.healthy.isSelected());
+//            inspection.setReport(this.report.getText());
+//            inspection.setFkPersonId(idSoldier);
 
-            if (id == 0) {
-                response = this.inspectionController.store(inspection);
-            } else {
-                response = this.inspectionController.update(inspection, id);
-            }
-            if (response) {
+//            if (id == 0) {
+//                response = this.inspectionController.store(inspection);
+//            } else {
+//                response = this.inspectionController.update(inspection, id);
+//            }
+//
+//            this.inspectionController.changeStatus(this.healthy.isSelected(), idSoldier);
+//            if (response) {
+            if (true) {
                 JOptionPane.showMessageDialog(null, "Registro Salvo com sucesso!");
+//                if (!this.healthy.isSelected()) {
+                if (false) {
+                    JOptionPane.showMessageDialog(null, "Soldado não saudável, retornando para a tela inicial!");
+                    new ViewDashboard(email).setVisible(true);
+                    this.setVisible(false);
+                }
+                this.fkPersonId.setText("");
                 this.headSize.setText("");
+                this.height.setText("");
+                this.weight.setText("");
+                this.footSize.setText("");
+                this.weightLifted.setText("");
+                this.healthy.setSelected(false);
+                this.report.setText("");
 
                 this.fkPersonId.requestFocus();
 
                 id = 0;
-                idPerson = "0";
+                idPerson = 0;
+                this.jTabbedPane2.setSelectedIndex(1);
+                this.qualificationController.popularTabelaXXX(qualificationsIndex, "");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios.");
@@ -536,16 +626,17 @@ public class ViewInspection extends javax.swing.JFrame {
     }//GEN-LAST:event_submit1ActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        JOptionPane.showMessageDialog(null, "Todo progresso não salvo será perdido");
         new ViewDashboard(email).setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_backActionPerformed
 
-    private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
-//        this.cityController.popularTabelaXXX(indexTable, this.criteria.getText());
-    }//GEN-LAST:event_searchActionPerformed
+    private void searchQualiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchQualiActionPerformed
+        this.qualificationController.popularTabelaXXX(qualificationsIndex, this.qualification.getText());
+    }//GEN-LAST:event_searchQualiActionPerformed
 
-    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        String idString = String.valueOf(indexTable.getValueAt(indexTable.getSelectedRow(), 0));
+    private void addToListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToListActionPerformed
+        String idString = String.valueOf(qualificationsSelected.getValueAt(qualificationsSelected.getSelectedRow(), 0));
         id = Integer.parseInt(idString);
 
         Inspection inspection = this.inspectionController.show(id);
@@ -560,23 +651,11 @@ public class ViewInspection extends javax.swing.JFrame {
 //
 //            this.name.requestFocus();
         }
-    }//GEN-LAST:event_updateActionPerformed
+    }//GEN-LAST:event_addToListActionPerformed
 
-    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        String idString = String.valueOf(indexTable.getValueAt(indexTable.getSelectedRow(), 0));
-        int idDelete = Integer.parseInt(idString);
-
-        if (this.inspectionController.delete(idDelete)) {
-            JOptionPane.showMessageDialog(null, "Registro excluído com sucesso!");
-//            this.inspectionController.popularTabelaXXX(indexTable, "");
-        } else {
-            JOptionPane.showMessageDialog(null, "Problemas ao excluir registro.");
-        }
-    }//GEN-LAST:event_deleteActionPerformed
-
-    private void criteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criteriaActionPerformed
+    private void qualificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qualificationActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_criteriaActionPerformed
+    }//GEN-LAST:event_qualificationActionPerformed
 
     private void footSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_footSizeActionPerformed
         // TODO add your handling code here:
@@ -598,6 +677,10 @@ public class ViewInspection extends javax.swing.JFrame {
         DlgPerson dlgSeacrhPerson = new DlgPerson(null, true, this);
         dlgSeacrhPerson.setVisible(true);
     }//GEN-LAST:event_searchPersonActionPerformed
+
+    private void removeFromListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromListActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_removeFromListActionPerformed
 
     /**
      * @param args the command line arguments
@@ -635,26 +718,25 @@ public class ViewInspection extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addToList;
     private javax.swing.JButton back;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
     private javax.swing.ButtonGroup buttonGroup5;
-    private javax.swing.JTextField criteria;
-    private javax.swing.JButton delete;
     private javax.swing.JTextField fkPersonId;
     private javax.swing.JTextField footSize;
     private javax.swing.JTextField headSize;
     private javax.swing.JRadioButton healthy;
     private javax.swing.JTextField height;
-    private javax.swing.JTable indexTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -669,12 +751,16 @@ public class ViewInspection extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTextField qualification;
+    private javax.swing.JTable qualificationsIndex;
+    private javax.swing.JTable qualificationsSelected;
+    private javax.swing.JButton removeFromList;
     private javax.swing.JTextArea report;
-    private javax.swing.JButton search;
     private javax.swing.JButton searchPerson;
+    private javax.swing.JButton searchQuali;
     private javax.swing.JButton submit1;
-    private javax.swing.JButton update;
     private javax.swing.JLabel warning1;
     private javax.swing.JTextField weight;
     private javax.swing.JTextField weightLifted;

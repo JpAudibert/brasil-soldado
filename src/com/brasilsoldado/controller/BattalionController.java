@@ -1,7 +1,7 @@
 package com.brasilsoldado.controller;
 
 import com.brasilsoldado.helpers.DBConnection;
-import com.brasilsoldado.helpers.InsertStates;
+import com.brasilsoldado.helpers.Inserts;
 import com.brasilsoldado.interfaces.IBasicController;
 import com.brasilsoldado.model.Battalion;
 import com.brasilsoldado.model.State;

@@ -159,7 +159,7 @@ public class DlgPerson extends javax.swing.JDialog {
 
     private void selectPersonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectPersonActionPerformed
         if (people.getSelectedRow() != -1) {
-            String id = String.valueOf(people.getValueAt(people.getSelectedRow(), 0));
+            int id = Integer.parseInt(String.valueOf(people.getValueAt(people.getSelectedRow(), 0)));
             String name = String.valueOf(people.getValueAt(people.getSelectedRow(), 1));
 
             viewInspection.setPerson(id, name);

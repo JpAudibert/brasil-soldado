@@ -1,6 +1,9 @@
 package com.brasilsoldado.model;
 
+import java.util.Calendar;
+
 public class Inspection {
+
     private int idinspection;
     private double headSize;
     private double height;
@@ -9,9 +12,10 @@ public class Inspection {
     private double weightLifted;
     private boolean isHealthy;
     private String report;
+    private int year;
     private int fkPersonId;
 
-    public Inspection(int idinspection, double headSize, double height, double weight, double footSize, double weightLifted, boolean isHealthy, String report, int fkPersonId) {
+    public Inspection(int idinspection, double headSize, double height, double weight, double footSize, double weightLifted, boolean isHealthy, String report, int year, int fkPersonId) {
         this.idinspection = idinspection;
         this.headSize = headSize;
         this.height = height;
@@ -20,6 +24,7 @@ public class Inspection {
         this.weightLifted = weightLifted;
         this.isHealthy = isHealthy;
         this.report = report;
+        this.year = year;
         this.fkPersonId = fkPersonId;
     }
 
@@ -90,6 +95,11 @@ public class Inspection {
         this.report = report;
     }
 
+    public int getYear() {
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        return year;
+    }
+
     public int getFkPersonId() {
         return fkPersonId;
     }
@@ -97,6 +107,5 @@ public class Inspection {
     public void setFkPersonId(int fkPersonId) {
         this.fkPersonId = fkPersonId;
     }
-    
-    
+
 }

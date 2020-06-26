@@ -1,7 +1,7 @@
 package com.brasilsoldado.controller;
 
 import com.brasilsoldado.helpers.DBConnection;
-import com.brasilsoldado.helpers.InsertStates;
+import com.brasilsoldado.helpers.Inserts;
 import com.brasilsoldado.interfaces.IBasicController;
 import com.brasilsoldado.model.State;
 import java.sql.ResultSet;
@@ -155,7 +155,7 @@ public class StateController implements IBasicController<State> {
             result.next();
             if (result.getInt(1) == 0) {
                 System.out.println("Inserindo dados");
-                InsertStates.insertStates();
+                Inserts.insertStates();
             }
 
             result = DBConnection.getInstance().getConnection().createStatement().executeQuery(""

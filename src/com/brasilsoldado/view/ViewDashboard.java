@@ -49,14 +49,22 @@ public class ViewDashboard extends javax.swing.JFrame {
         this.cpf.setText("CPF: " + person.getCpf());
         this.mothersName.setText("Nome da Mãe: " + person.getMomsName());
         this.fathersName.setText("Nome do Pai: " + person.getDadsName());
+        this.reports.setVisible(false);
+        this.inspectionCreate.setVisible(false);
         switch (person.getType()) {
             case 1:
                 this.type.setText("Situação: Alistado");
-                this.reports.setVisible(false);
+                break;
+            case 2:
+                this.type.setText("Situação: Dispensado por complicação médica");
+                break;
+            case 3:
+                this.type.setText("Situação: Aguardando aprovação");
                 break;
             case 777:
                 this.type.setText("Situação: Capitão");
                 this.reports.setVisible(true);
+                this.inspectionCreate.setVisible(true);
                 break;
         }
     }
@@ -80,8 +88,9 @@ public class ViewDashboard extends javax.swing.JFrame {
         type = new javax.swing.JLabel();
         mothersName = new javax.swing.JLabel();
         fathersName = new javax.swing.JLabel();
-        update = new javax.swing.JButton();
+        inspectionView = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        update = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         warningMenu = new javax.swing.JMenuItem();
@@ -94,6 +103,7 @@ public class ViewDashboard extends javax.swing.JFrame {
         enlistedReport = new javax.swing.JMenuItem();
         reportAdmPerState = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        inspectionCreate = new javax.swing.JMenu();
 
         jMenu3.setText("jMenu3");
 
@@ -135,10 +145,10 @@ public class ViewDashboard extends javax.swing.JFrame {
         fathersName.setForeground(new java.awt.Color(254, 254, 254));
         fathersName.setText("- Nome do Pai: dados");
 
-        update.setText("Editar Informações");
-        update.addActionListener(new java.awt.event.ActionListener() {
+        inspectionView.setText("Visualizar informações de inspeção");
+        inspectionView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateActionPerformed(evt);
+                inspectionViewActionPerformed(evt);
             }
         });
 
@@ -146,6 +156,13 @@ public class ViewDashboard extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        update.setText("Editar Informações");
+        update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateActionPerformed(evt);
             }
         });
 
@@ -164,25 +181,37 @@ public class ViewDashboard extends javax.swing.JFrame {
                     .addComponent(surname)
                     .addComponent(birthday)
                     .addComponent(cpf))
-                .addGap(92, 92, 92)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(181, 181, 181)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(133, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(inspectionView, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(122, 122, 122))))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(409, Short.MAX_VALUE)
                     .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(133, Short.MAX_VALUE))
+                    .addGap(123, 123, 123)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(name)
-                    .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addComponent(surname)
-                .addGap(41, 41, 41)
-                .addComponent(birthday)
+                .addGap(51, 51, 51)
+                .addComponent(name)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(surname)
+                        .addGap(41, 41, 41)
+                        .addComponent(birthday))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(inspectionView, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(35, 35, 35)
                 .addComponent(cpf)
                 .addGap(41, 41, 41)
@@ -194,6 +223,11 @@ public class ViewDashboard extends javax.swing.JFrame {
                     .addComponent(fathersName)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(30, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(136, 136, 136)
+                    .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(397, Short.MAX_VALUE)))
         );
 
         jMenu1.setText("Páginas");
@@ -276,6 +310,14 @@ public class ViewDashboard extends javax.swing.JFrame {
 
         jMenuBar1.add(reports);
 
+        inspectionCreate.setText("Inspeção");
+        inspectionCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inspectionCreateActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(inspectionCreate);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -292,10 +334,10 @@ public class ViewDashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        new ViewPersonUpdate(email).setVisible(true);
+    private void inspectionViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inspectionViewActionPerformed
+        new ViewInspection(email, true).setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_updateActionPerformed
+    }//GEN-LAST:event_inspectionViewActionPerformed
 
     private void battalionMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_battalionMenuActionPerformed
         new ViewBattalion(email).setVisible(true);
@@ -366,6 +408,15 @@ public class ViewDashboard extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        new ViewPersonUpdate(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_updateActionPerformed
+
+    private void inspectionCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inspectionCreateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inspectionCreateActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -408,6 +459,8 @@ public class ViewDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel cpf;
     private javax.swing.JMenuItem enlistedReport;
     private javax.swing.JLabel fathersName;
+    private javax.swing.JMenu inspectionCreate;
+    private javax.swing.JButton inspectionView;
     private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;

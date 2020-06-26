@@ -6,6 +6,7 @@
 package com.brasilsoldado.controller;
 
 import com.brasilsoldado.helpers.DBConnection;
+import com.brasilsoldado.helpers.Inserts;
 import com.brasilsoldado.interfaces.IBasicController;
 import com.brasilsoldado.model.Qualification;
 import java.sql.ResultSet;
@@ -150,6 +151,17 @@ public class QualificationController implements IBasicController<Qualification> 
 
         // cria matriz de acordo com nº de registros da tabela
         try {
+            result = DBConnection.getInstance().getConnection().createStatement().executeQuery(""
+                    + "SELECT CASE \n"
+                    + "         WHEN EXISTS (SELECT * FROM qualification LIMIT 1) THEN 1\n"
+                    + "         ELSE 0 \n"
+                    + "       END");
+            result.next();
+            if (result.getInt(1) == 0) {
+                System.out.println("Inserindo dados");
+                Inserts.insertQualifications();
+            }
+            
             result = DBConnection.getInstance().getConnection().createStatement().executeQuery(""
                     + "SELECT count(*) FROM qualification WHERE type ILIKE '%" + criteria + "%'");
 
