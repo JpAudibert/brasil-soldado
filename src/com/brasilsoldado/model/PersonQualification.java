@@ -6,6 +6,15 @@ public class PersonQualification {
     private int fkPersonId;
     private int fkQualificationId;
 
+    public PersonQualification() {
+    }
+
+    public PersonQualification(int IdPersonQualification, int fkPersonId, int fkQualificationId) {
+        this.IdPersonQualification = IdPersonQualification;
+        this.fkPersonId = fkPersonId;
+        this.fkQualificationId = fkQualificationId;
+    }
+
     public int getIdPersonQualification() {
         return IdPersonQualification;
     }
