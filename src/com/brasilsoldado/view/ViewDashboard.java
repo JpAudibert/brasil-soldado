@@ -65,6 +65,7 @@ public class ViewDashboard extends javax.swing.JFrame {
                 this.type.setText("Situação: Capitão");
                 this.reports.setVisible(true);
                 this.inspectionCreate.setVisible(true);
+                this.inspectionView.setVisible(false);
                 break;
         }
     }

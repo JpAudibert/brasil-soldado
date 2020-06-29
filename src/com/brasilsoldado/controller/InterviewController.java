@@ -22,8 +22,8 @@ import javax.swing.table.TableColumn;
  *
  * @author deusjp
  */
-public class InterviewController implements IBasicController<Interview>{
-    
+public class InterviewController implements IBasicController<Interview> {
+
     private ResultSet result;
 
     @Override
@@ -83,8 +83,8 @@ public class InterviewController implements IBasicController<Interview>{
                     .createStatement();
             String query = " INSERT INTO interview VALUES("
                     + "DEFAULT,"
-                    + "\'" + interview.getReport()+ "\'"
-                    + ")";
+                    + "\'" + interview.getReport() + "\'"
+                    + ") RETURNING idinterview";
 
             System.out.println(query);
 
@@ -98,6 +98,33 @@ public class InterviewController implements IBasicController<Interview>{
         return false;
     }
 
+    public int storeReturningId(Interview interview) {
+        int response = -1;
+        try {
+            Statement stmt = DBConnection
+                    .getInstance()
+                    .getConnection()
+                    .createStatement();
+            String query = " INSERT INTO interview VALUES("
+                    + "DEFAULT,"
+                    + "\'" + interview.getReport() + "\'"
+                    + ") RETURNING idinterview";
+
+            System.out.println(query);
+
+            result = stmt.executeQuery(query);
+
+            if (result.next()) {
+                response = result.getInt("idinterview");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(QualificationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return response;
+    }
+
     @Override
     public boolean update(Interview interview, int id) {
         try {
@@ -106,7 +133,7 @@ public class InterviewController implements IBasicController<Interview>{
                     .getConnection()
                     .createStatement();
             String query = " UPDATE interview SET "
-                    + "type = '" + interview.getReport()+ "' "
+                    + "type = '" + interview.getReport() + "' "
                     + "WHERE idinterview= " + id;
 
             System.out.println(query);
@@ -137,7 +164,7 @@ public class InterviewController implements IBasicController<Interview>{
         }
         return false;
     }
-    
+
     /* Popula JTable */
     public void popularTabelaXXX(JTable table, String criteria) {
         // dados da tabela

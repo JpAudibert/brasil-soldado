@@ -6,6 +6,15 @@ public class PersonInterview {
     private int fkPersonId;
     private int fkInterviewId;
 
+    public PersonInterview(int idPersonInterview, int fkPersonId, int fkInterviewId) {
+        this.idPersonInterview = idPersonInterview;
+        this.fkPersonId = fkPersonId;
+        this.fkInterviewId = fkInterviewId;
+    }
+
+    public PersonInterview() {
+    }
+
     public int getIdPersonInterview() {
         return idPersonInterview;
     }

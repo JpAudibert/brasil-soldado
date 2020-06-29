@@ -7,8 +7,8 @@ package com.brasilsoldado.controller;
 
 import com.brasilsoldado.helpers.DBConnection;
 import com.brasilsoldado.interfaces.IBasicController;
-import com.brasilsoldado.model.PersonQualification;
-import com.brasilsoldado.model.State;
+import com.brasilsoldado.model.Interview;
+import com.brasilsoldado.model.PersonInterview;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,19 +20,19 @@ import java.util.logging.Logger;
  *
  * @author deusjp
  */
-public class PersonQualificationController implements IBasicController<PersonQualification> {
+public class PersonInterviewController implements IBasicController<PersonInterview>{
 
     private ResultSet result;
-    final private String tableName = "\"personQualification\"";
-
+    final private String tableName = "\"personInterview\"";
+    
     @Override
-    public ArrayList<PersonQualification> index() {
+    public ArrayList<PersonInterview> index() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public PersonQualification show(int id) {
-        PersonQualification personQualification = null;
+    public PersonInterview show(int id) {
+        PersonInterview personInterview = null;
         try {
             Statement stmt = DBConnection
                     .getInstance()
@@ -44,20 +44,44 @@ public class PersonQualificationController implements IBasicController<PersonQua
             result = stmt.executeQuery(query);
 
             if (result.next()) {
-                personQualification = new PersonQualification();
-                personQualification.setIdPersonQualification(result.getInt("idpersonqualification"));
-                personQualification.setFkPersonId(result.getInt("fkpersonid"));
-                personQualification.setFkQualificationId(result.getInt("fkqualificationid"));
+                personInterview = new PersonInterview();
+                personInterview.setIdPersonInterview(result.getInt("idpersoninterview"));
+                personInterview.setFkPersonId(result.getInt("fkpersonid"));
+                personInterview.setFkInterviewId(result.getInt("fkinterviewid"));
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(PersonQualificationController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PersonInterviewController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return personQualification;
+        return personInterview;
     }
 
+    public Interview showInterview(int id) {
+        Interview interview = null;
+        try {
+            Statement stmt = DBConnection
+                    .getInstance()
+                    .getConnection()
+                    .createStatement();
+
+            String query = " SELECT i.idinterview, i.report FROM interview i INNER JOIN " + tableName + " pi ON pi.fkinterviewid = i.idinterview WHERE pi.fkpersonid = " + id + " LIMIT 1";
+
+            result = stmt.executeQuery(query);
+
+            if (result.next()) {
+                interview = new Interview();
+                interview.setIdInterview(result.getInt("idinterview"));
+                interview.setReport(result.getString("report"));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonInterviewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return interview;
+    }
+    
     @Override
-    public boolean store(PersonQualification personQuali) {
+    public boolean store(PersonInterview personInter) {
         try {
             Statement stmt = DBConnection
                     .getInstance()
@@ -65,8 +89,8 @@ public class PersonQualificationController implements IBasicController<PersonQua
                     .createStatement();
             String query = " INSERT INTO " + tableName + " VALUES("
                     + "DEFAULT,"
-                    + "\'" + personQuali.getFkPersonId() + "\',"
-                    + "\'" + personQuali.getFkQualificationId() + "\'"
+                    + "\'" + personInter.getFkPersonId() + "\',"
+                    + "\'" + personInter.getFkInterviewId() + "\'"
                     + ")";
 
             System.out.println(query);
@@ -74,14 +98,14 @@ public class PersonQualificationController implements IBasicController<PersonQua
 
             return true;
         } catch (SQLException ex) {
-            Logger.getLogger(PersonQualificationController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PersonInterviewController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return false;
     }
 
     @Override
-    public boolean update(PersonQualification personQuali, int id) {
+    public boolean update(PersonInterview o, int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -100,9 +124,9 @@ public class PersonQualificationController implements IBasicController<PersonQua
 
             return true;
         } catch (SQLException ex) {
-            Logger.getLogger(PersonQualificationController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PersonInterviewController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
-
+    
 }
