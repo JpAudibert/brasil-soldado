@@ -105,6 +105,8 @@ public class ViewDashboard extends javax.swing.JFrame {
         reportAdmPerState = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         inspectionCreate = new javax.swing.JMenu();
+        insertInspection = new javax.swing.JMenuItem();
+        indexInspection = new javax.swing.JMenuItem();
 
         jMenu3.setText("jMenu3");
 
@@ -317,6 +319,23 @@ public class ViewDashboard extends javax.swing.JFrame {
                 inspectionCreateActionPerformed(evt);
             }
         });
+
+        insertInspection.setText("Cadastrar");
+        insertInspection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertInspectionActionPerformed(evt);
+            }
+        });
+        inspectionCreate.add(insertInspection);
+
+        indexInspection.setText("Visualizar");
+        indexInspection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                indexInspectionActionPerformed(evt);
+            }
+        });
+        inspectionCreate.add(indexInspection);
+
         jMenuBar1.add(inspectionCreate);
 
         setJMenuBar(jMenuBar1);
@@ -418,6 +437,16 @@ public class ViewDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inspectionCreateActionPerformed
 
+    private void indexInspectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_indexInspectionActionPerformed
+        new ViewListInspection(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_indexInspectionActionPerformed
+
+    private void insertInspectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertInspectionActionPerformed
+        new ViewInspection(email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_insertInspectionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -460,6 +489,8 @@ public class ViewDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel cpf;
     private javax.swing.JMenuItem enlistedReport;
     private javax.swing.JLabel fathersName;
+    private javax.swing.JMenuItem indexInspection;
+    private javax.swing.JMenuItem insertInspection;
     private javax.swing.JMenu inspectionCreate;
     private javax.swing.JButton inspectionView;
     private javax.swing.JButton jButton1;

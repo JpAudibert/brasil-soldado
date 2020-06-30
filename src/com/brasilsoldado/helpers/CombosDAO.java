@@ -17,7 +17,7 @@ public class CombosDAO {
 
     // construtor 1
     public void popularCombo(String tabela, JComboBox combo) {
-        
+
         combo.removeAllItems();
 
         ComboItem item = new ComboItem();
@@ -46,7 +46,7 @@ public class CombosDAO {
     public void popularCombo(String tabela, String campo1, String campo2, JComboBox combo, String complementoSQL) {
 
         combo.removeAllItems();
-        
+
         ComboItem item = new ComboItem();
         item.setCodigo(0);
         item.setDescricao("Selecione");
@@ -68,11 +68,39 @@ public class CombosDAO {
             System.out.println("Erro ao popular Combo = " + e.toString());
         }
     }
-    
+
+    public void popularCombo(JComboBox combo) {
+
+        combo.removeAllItems();
+
+        ComboItem item = new ComboItem();
+        item.setCodigo(0);
+        item.setDescricao("Selecione");
+        combo.addItem(item);
+
+        try {
+            ComboItem[] items = new ComboItem[10];
+
+            for (int i = 1; i <= items.length; i++) {
+                item = new ComboItem();
+                item.setCodigo(i);
+                item.setDescricao(i + "");
+
+                if (i == 10) {
+                    item.setDescricao(i + " ou +");
+                }
+
+                combo.addItem(item);
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao popular Combo = " + e.toString());
+        }
+    }
+
     public void popularComboConcat(String tabela, String campo1, String campo2, String union, String concat, JComboBox combo, String complementoSQL) {
 
         combo.removeAllItems();
-        
+
         ComboItem item = new ComboItem();
         item.setCodigo(0);
         item.setDescricao("Selecione");
@@ -85,7 +113,7 @@ public class CombosDAO {
                 while (resultado.next()) {
                     item = new ComboItem();
                     item.setCodigo(resultado.getInt(campo1));
-                    item.setDescricao(resultado.getString(campo2)+ union + resultado.getString(concat));
+                    item.setDescricao(resultado.getString(campo2) + union + resultado.getString(concat));
 
                     combo.addItem(item);
                 }
