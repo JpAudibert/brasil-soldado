@@ -67,14 +67,6 @@ CREATE TABLE "battalion"(
 	CONSTRAINT fk_fkCityId_battalion FOREIGN KEY(fkCityId) REFERENCES city
 );
 
-CREATE TABLE "militaryJunta"(
-	idMilitaryJunta SERIAL,
-	fkBattalionId INT NOT NULL,
-	
-	CONSTRAINT pk_militaryJunta PRIMARY KEY(idMilitaryJunta),
-	CONSTRAINT fk_fkBattalionId_miliaryJunta FOREIGN KEY(idMilitaryJunta) REFERENCES battalion
-);
-
 CREATE TABLE "personWarning"(
 	idPersonWarning SERIAL,
 	fkPersonId INT NOT NULL,
@@ -103,6 +95,23 @@ CREATE TABLE "personQualification"(
 	CONSTRAINT pk_personQualification PRIMARY KEY(idPersonQualification),
 	CONSTRAINT fk_fkPersonId_personQualification FOREIGN KEY(fkPersonId) REFERENCES person,
 	CONSTRAINT fk_fkQualificationId_personQualification FOREIGN KEY(fkQualificationId) REFERENCES qualification
+);
+
+CREATE TABLE inspection (
+	idinspection SERIAL,
+	headSize DECIMAL NOT NULL,
+	height DECIMAL NOT NULL,
+	weight DECIMAL NOT NULL,
+	footSize DECIMAL NOT NULL,
+	weightLifted DECIMAL,
+	isHealthy BOOLEAN NOT NULL,
+	report TEXT NOT NULL,
+	year INT NOT NULL,
+	fkPersonId INT NOT NULL,
+	
+	CONSTRAINT pk_inspection PRIMARY KEY(idinspection),
+	CONSTRAINT fk_fkPersonId_person FOREIGN KEY(fkpersonId) REFERENCES "person"
+
 );
 
 
