@@ -220,7 +220,7 @@ public class PersonController implements IBasicController<Person> {
         // cria matriz de acordo com nº de registros da tabela
         try {
             result = DBConnection.getInstance().getConnection().createStatement().executeQuery(""
-                    + "SELECT count(idperson) FROM person WHERE type = 1 AND CONCAT (name, ' ', surname) ILIKE '%" + criteria + "%'");
+                    + " SELECT count(idperson) FROM person WHERE type = 1 AND CONCAT (name, ' ', surname) ILIKE '%" + criteria + "%'");
 
             result.next();
 

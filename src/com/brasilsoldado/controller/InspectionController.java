@@ -82,7 +82,7 @@ public class InspectionController implements IBasicController<Inspection> {
         }
         return inspection;
     }
-    
+
     public Inspection showFkPersonId(int fkPersonId) {
         Inspection inspection = null;
         try {
@@ -216,6 +216,29 @@ public class InspectionController implements IBasicController<Inspection> {
             Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void changeStatusToEnlisted(boolean enlisted, int id) {
+        try {
+            Statement stmt = DBConnection
+                    .getInstance()
+                    .getConnection()
+                    .createStatement();
+
+            String query = "";
+            if (enlisted) {
+                query = " UPDATE person SET type = 4 WHERE idperson = " + id;
+
+            } else {
+                query = " UPDATE person SET type = 5 WHERE idperson = " + id;
+            }
+
+            System.out.println(query);
+            stmt.execute(query);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(StateController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 
     /* Popula JTable */
@@ -228,34 +251,46 @@ public class InspectionController implements IBasicController<Inspection> {
         cabecalho[0] = "Código";
         cabecalho[1] = "Pessoa";
         cabecalho[2] = "CPF";
-        cabecalho[3] = "Altura";
-        cabecalho[4] = "Peso";
-        cabecalho[5] = "Localidade";
-        cabecalho[6] = "Qualificações";
+        cabecalho[3] = "Email";
+        cabecalho[4] = "Altura";
+        cabecalho[5] = "Peso";
+        cabecalho[6] = "Localidade";
 
         // cria matriz de acordo com nº de registros da tabela
         try {
-            result = DBConnection.getInstance().getConnection().createStatement().executeQuery(""
-                    + " SELECT \n" +
-                            " COUNT(p.idperson) "+
-                        " FROM \n" +
-                            " person p\n" +
-                                " INNER JOIN inspection i ON p.idperson = i.fkpersonid\n" +
-                                " INNER JOIN \"personQualification\" pq ON pq.fkpersonid = p.idperson\n" +
-                                " INNER JOIN qualification q ON q.idqualification = pq.fkqualificationid\n" +
-                                " INNER JOIN city c ON p.fkcityid = c.idcity\n" +
-                                " INNER JOIN state s ON c.fkstateid = s.idstate\n" +
-                        " WHERE\n" +
-                            " p.type = 3\n" +
-                            criteria +
-                        " GROUP BY\n" +
-                            " p.idperson, i.idinspection, c.idcity, s.idstate\n" +
-                        " HAVING\n" +
-                            " count(pq.fkqualificationid) > " + qttQuali);
+            String query = ""
+                    + " SELECT \n"
+                    + " p.idperson,\n"
+                    + " CONCAT(p.name, ' ', p.surname) AS name,\n"
+                    + " p.cpf,\n"
+                    + " p.email,\n"
+                    + " i.height,\n"
+                    + " i.weight,\n"
+                    + " CONCAT (c.name, ' - ', s.initials) AS location\n"
+                    + " FROM \n"
+                    + " person p\n"
+                    + " INNER JOIN inspection i ON p.idperson = i.fkpersonid\n"
+                    + " INNER JOIN \"personQualification\" pq ON pq.fkpersonid = p.idperson\n"
+                    + " INNER JOIN qualification q ON q.idqualification = pq.fkqualificationid\n"
+                    + " INNER JOIN city c ON p.fkcityid = c.idcity\n"
+                    + " INNER JOIN state s ON c.fkstateid = s.idstate\n"
+                    + " WHERE\n"
+                    + " p.type = 3 \n "
+                    + criteria
+                    + " GROUP BY\n"
+                    + " p.idperson, i.idinspection, c.idcity, s.idstate, pq.fkpersonid\n"
+                    + " HAVING\n"
+                    + " count(pq.fkqualificationid) >= " + qttQuali;
+            
+            result = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
 
-            result.next();
+            int count = 0;
+            while (result.next()) {
+                count++;
+            }
+            
 
-            dadosTabela = new Object[1][7];
+            dadosTabela = new Object[count][7];
             System.out.println(result.getInt(1));
 
         } catch (Exception e) {
@@ -266,39 +301,41 @@ public class InspectionController implements IBasicController<Inspection> {
 
         // efetua consulta na tabela
         try {
-            result = DBConnection.getInstance().getConnection().createStatement().executeQuery(""
-                    + " SELECT \n" +
-                            " p.idperson,\n" +
-                            " CONCAT(p.name, ' ', p.surname) AS name,\n" +
-                            " p.cpf,\n" +
-                            " i.height,\n" +
-                            " i.weight,\n" +
-                            " CONCAT (c.name, ' - ', s.initials) AS location,\n" +
-                            " STRING_AGG(q.type, ', ') AS qualifications\n" +
-                        " FROM \n" +
-                            " person p\n" +
-                                " INNER JOIN inspection i ON p.idperson = i.fkpersonid\n" +
-                                " INNER JOIN \"personQualification\" pq ON pq.fkpersonid = p.idperson\n" +
-                                " INNER JOIN qualification q ON q.idqualification = pq.fkqualificationid\n" +
-                                " INNER JOIN city c ON p.fkcityid = c.idcity\n" +
-                                " INNER JOIN state s ON c.fkstateid = s.idstate\n" +
-                        " WHERE\n" +
-                            " p.type = 3\n" +
-                            criteria +
-                        " GROUP BY\n" +
-                            " p.idperson, i.idinspection, c.idcity, s.idstate\n" +
-                        " HAVING\n" +
-                            " count(pq.fkqualificationid) > " + qttQuali);
-
+            String query = ""
+                    + " SELECT \n"
+                    + " p.idperson,\n"
+                    + " CONCAT(p.name, ' ', p.surname) AS name,\n"
+                    + " p.cpf,\n"
+                    + " p.email,\n"
+                    + " i.height,\n"
+                    + " i.weight,\n"
+                    + " CONCAT (c.name, ' - ', s.initials) AS location\n"
+                    + " FROM \n"
+                    + " person p\n"
+                    + " INNER JOIN inspection i ON p.idperson = i.fkpersonid\n"
+                    + " INNER JOIN \"personQualification\" pq ON pq.fkpersonid = p.idperson\n"
+                    + " INNER JOIN qualification q ON q.idqualification = pq.fkqualificationid\n"
+                    + " INNER JOIN city c ON p.fkcityid = c.idcity\n"
+                    + " INNER JOIN state s ON c.fkstateid = s.idstate\n"
+                    + " WHERE\n"
+                    + " p.type = 3 \n "
+                    + criteria
+                    + " GROUP BY\n"
+                    + " p.idperson, i.idinspection, c.idcity, s.idstate, pq.fkpersonid\n"
+                    + " HAVING\n"
+                    + " count(pq.fkqualificationid) >= " + qttQuali;
+            result = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
+            System.out.println(query);
+            
             while (result.next()) {
 
                 dadosTabela[lin][0] = result.getInt("idperson");
                 dadosTabela[lin][1] = result.getString("name");
                 dadosTabela[lin][2] = result.getString("cpf");
-                dadosTabela[lin][3] = result.getString("height");
-                dadosTabela[lin][4] = result.getString("weight");
-                dadosTabela[lin][5] = result.getString("location");
-                dadosTabela[lin][6] = result.getString("qualifications");
+                dadosTabela[lin][3] = result.getString("email");
+                dadosTabela[lin][4] = result.getString("height");
+                dadosTabela[lin][5] = result.getString("weight");
+                dadosTabela[lin][6] = result.getString("location");
 
                 // caso a coluna precise exibir uma imagem
 //                if (resultadoQ.getBoolean("Situacao")) {

@@ -48,7 +48,12 @@ public class ViewDashboard extends javax.swing.JFrame {
         this.birthday.setText("Data de Nascimento: " + Formatacao.ajustaDataDMA(person.getBirthday() + ""));
         this.cpf.setText("CPF: " + person.getCpf());
         this.mothersName.setText("Nome da Mãe: " + person.getMomsName());
-        this.fathersName.setText("Nome do Pai: " + person.getDadsName());
+        if (person.getDadsName() != null) {
+            this.fathersName.setText("Nome do Pai: " + person.getDadsName());
+        }else{
+            this.fathersName.setText("");
+        }
+        this.pages.setVisible(false);
         this.reports.setVisible(false);
         this.inspectionCreate.setVisible(false);
         switch (person.getType()) {
@@ -61,8 +66,15 @@ public class ViewDashboard extends javax.swing.JFrame {
             case 3:
                 this.type.setText("Situação: Aguardando aprovação");
                 break;
+            case 4:
+                this.type.setText("Parabéns! Você foi selecionado!");
+                break;
+            case 5:
+                this.type.setText("Situação: Dispensado");
+                break;
             case 777:
                 this.type.setText("Situação: Capitão");
+                this.pages.setVisible(true);
                 this.reports.setVisible(true);
                 this.inspectionCreate.setVisible(true);
                 this.inspectionView.setVisible(false);
@@ -93,7 +105,7 @@ public class ViewDashboard extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         update = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        pages = new javax.swing.JMenu();
         warningMenu = new javax.swing.JMenuItem();
         battalionMenu = new javax.swing.JMenuItem();
         cityMenu = new javax.swing.JMenuItem();
@@ -233,7 +245,7 @@ public class ViewDashboard extends javax.swing.JFrame {
                     .addContainerGap(397, Short.MAX_VALUE)))
         );
 
-        jMenu1.setText("Páginas");
+        pages.setText("Páginas");
 
         warningMenu.setText("Avisos");
         warningMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -241,7 +253,7 @@ public class ViewDashboard extends javax.swing.JFrame {
                 warningMenuActionPerformed(evt);
             }
         });
-        jMenu1.add(warningMenu);
+        pages.add(warningMenu);
 
         battalionMenu.setText("Batalhões");
         battalionMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -249,7 +261,7 @@ public class ViewDashboard extends javax.swing.JFrame {
                 battalionMenuActionPerformed(evt);
             }
         });
-        jMenu1.add(battalionMenu);
+        pages.add(battalionMenu);
 
         cityMenu.setText("Cidades");
         cityMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -257,7 +269,7 @@ public class ViewDashboard extends javax.swing.JFrame {
                 cityMenuActionPerformed(evt);
             }
         });
-        jMenu1.add(cityMenu);
+        pages.add(cityMenu);
 
         stateMenu.setText("Estados");
         stateMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -265,7 +277,7 @@ public class ViewDashboard extends javax.swing.JFrame {
                 stateMenuActionPerformed(evt);
             }
         });
-        jMenu1.add(stateMenu);
+        pages.add(stateMenu);
 
         qualificationMenu.setText("Qualificações");
         qualificationMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -273,9 +285,9 @@ public class ViewDashboard extends javax.swing.JFrame {
                 qualificationMenuActionPerformed(evt);
             }
         });
-        jMenu1.add(qualificationMenu);
+        pages.add(qualificationMenu);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(pages);
 
         reports.setText("Relatórios");
 
@@ -494,13 +506,13 @@ public class ViewDashboard extends javax.swing.JFrame {
     private javax.swing.JMenu inspectionCreate;
     private javax.swing.JButton inspectionView;
     private javax.swing.JButton jButton1;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel mothersName;
     private javax.swing.JLabel name;
+    private javax.swing.JMenu pages;
     private javax.swing.JMenuItem qualificationMenu;
     private javax.swing.JMenuItem reportAdmPerState;
     private javax.swing.JMenuItem reportBattalion;

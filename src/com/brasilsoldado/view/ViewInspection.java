@@ -37,6 +37,7 @@ public class ViewInspection extends javax.swing.JFrame {
     final CombosDAO combo = new CombosDAO();
     int id = 0;
     String email;
+    String oldEmail;
     int idPerson = 0;
     ArrayList<Qualification> qualifications = new ArrayList<>();
     String exceptions = "";
@@ -46,16 +47,24 @@ public class ViewInspection extends javax.swing.JFrame {
      */
     public ViewInspection() {
         initComponents();
+        this.recruit.setVisible(false);
+        this.toRecruit.setVisible(false);
+
     }
 
     public ViewInspection(String email) {
         initComponents();
         this.email = email;
+        this.recruit.setVisible(false);
+        this.toRecruit.setVisible(false);
+        this.jTabbedPane2.setEnabledAt(1, false);
+        this.jTabbedPane2.setEnabledAt(2, false);
     }
 
     public ViewInspection(String email, boolean isView) {
         initComponents();
         this.email = email;
+        System.out.println(this.email);
 
         Person person = this.personController.show(email);
         Inspection inspectionShow = this.inspectionController.showFkPersonId(person.getIdPerson());
@@ -89,9 +98,71 @@ public class ViewInspection extends javax.swing.JFrame {
         removeFromList.setVisible(false);
         qualificationsSelected.setVisible(false);
         qualiSelected.setText("Ignorar tabela abaixo");
-        
+        submitQuali.setVisible(false);
+
         interview.setText(personInterviewController.showInterview(person.getIdPerson()).getReport());
         interview.setEditable(false);
+        submitInterview.setVisible(false);
+        this.recruit.setVisible(false);
+        this.toRecruit.setVisible(false);
+
+        this.jTabbedPane2.setEnabledAt(1, true);
+        this.jTabbedPane2.setEnabledAt(2, true);
+    }
+
+    public ViewInspection(String email, boolean isView, String oldEmail) {
+        initComponents();
+        this.email = email;
+        this.oldEmail = oldEmail;
+        System.out.println(this.email);
+
+        Person person = this.personController.show(email);
+        Inspection inspectionShow = this.inspectionController.showFkPersonId(person.getIdPerson());
+
+        this.idPerson = person.getIdPerson();
+        this.fkPersonId.setText(person.getName() + " " + person.getSurname());
+        this.headSize.setText(inspectionShow.getHeadSize() + " cm");
+        this.height.setText(inspectionShow.getHeight() + " cm");
+        this.weight.setText(inspectionShow.getWeight() + " kg");
+        this.footSize.setText(inspectionShow.getFootSize() + "");
+        this.weightLifted.setText(inspectionShow.getWeightLifted() + " kg");
+        this.report.setText(inspectionShow.getReport());
+
+        this.healthy.setSelected(inspectionShow.isIsHealthy());
+
+        this.fkPersonId.setEditable(false);
+        this.headSize.setEditable(false);
+        this.height.setEditable(false);
+        this.weight.setEditable(false);
+        this.footSize.setEditable(false);
+        this.weightLifted.setEditable(false);
+        this.healthy.setEnabled(false);
+        this.report.setEditable(false);
+        this.submit1.setVisible(false);
+
+        qualificationController.popularTabelaXXXColigation(qualificationsIndex, idPerson);
+        qualiText.setText("Atributos do alistado:");
+        qualification.setVisible(false);
+        searchQuali.setVisible(false);
+        addToList.setVisible(false);
+        removeFromList.setVisible(false);
+        qualificationsSelected.setVisible(false);
+        qualiSelected.setText("Ignorar tabela abaixo");
+        submitQuali.setVisible(false);
+
+        interview.setText(personInterviewController.showInterview(person.getIdPerson()).getReport());
+        interview.setEditable(false);
+        submitInterview.setVisible(false);
+        this.recruit.setVisible(false);
+        this.toRecruit.setVisible(false);
+        if (personController.show(this.oldEmail).getType() == 777) {
+            this.toRecruit.setVisible(true);
+            this.recruit.setVisible(true);
+
+        }
+
+        this.jTabbedPane2.setEnabledAt(1, true);
+        this.jTabbedPane2.setEnabledAt(2, true);
     }
 
     public void setPerson(int id, String name) {
@@ -142,6 +213,8 @@ public class ViewInspection extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         fkPersonId = new javax.swing.JTextField();
         searchPerson = new javax.swing.JButton();
+        recruit = new javax.swing.JButton();
+        toRecruit = new javax.swing.JCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
@@ -279,6 +352,17 @@ public class ViewInspection extends javax.swing.JFrame {
             }
         });
 
+        recruit.setText("Recrutar");
+        recruit.setPreferredSize(new java.awt.Dimension(100, 35));
+        recruit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recruitActionPerformed(evt);
+            }
+        });
+
+        toRecruit.setForeground(new java.awt.Color(53, 53, 53));
+        toRecruit.setText("Recrutar");
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -316,7 +400,7 @@ public class ViewInspection extends javax.swing.JFrame {
                                 .addComponent(headSize)
                                 .addComponent(height, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(footSize)
                             .addGap(33, 33, 33))
@@ -332,15 +416,21 @@ public class ViewInspection extends javax.swing.JFrame {
                                         .addComponent(weight, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGap(33, 33, 33))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(jPanel7Layout.createSequentialGroup()
+                                            .addComponent(toRecruit)
+                                            .addGap(30, 30, 30)
+                                            .addComponent(recruit, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(jPanel7Layout.createSequentialGroup()
                                             .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(warning1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                                                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(20, 20, 20)))
-                                            .addGap(32, 32, 32)
+                                                    .addGap(52, 52, 52))
+                                                .addGroup(jPanel7Layout.createSequentialGroup()
+                                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(warning1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGap(32, 32, 32)))
                                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGap(32, 32, 32)))))))
         );
@@ -385,9 +475,13 @@ public class ViewInspection extends javax.swing.JFrame {
                         .addGap(37, 37, 37)
                         .addComponent(warning1))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
+                .addGap(18, 18, 18)
                 .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(recruit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(toRecruit))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jPanel7Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {fkPersonId, footSize, headSize, height, weight, weightLifted});
@@ -525,7 +619,7 @@ public class ViewInspection extends javax.swing.JFrame {
                                 .addComponent(qualiSelected))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
                                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(submitQuali, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(submitQuali, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel9Layout.createSequentialGroup()
                                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(addToList, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -539,7 +633,7 @@ public class ViewInspection extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel9Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addToList, removeFromList, searchQuali, submitQuali});
+        jPanel9Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addToList, removeFromList, searchQuali});
 
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -678,15 +772,15 @@ public class ViewInspection extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void submitQualiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitQualiActionPerformed
-        Person person = personController.show(email);
+        Person person = personController.show(idPerson);
         boolean response = false;
         PersonQualification personTest = personQualificationController.show(person.getIdPerson());
-        if (personTest != null || !personTest.equals("")) {
-            personQualificationController.delete(person.getIdPerson());
-        }
+//        if (personTest != null || !personTest.equals("")) {
+//            personQualificationController.delete(person.getIdPerson());
+//        }
         for (int i = 0; i < qualifications.size(); i++) {
             PersonQualification personQualification = new PersonQualification();
-            personQualification.setFkPersonId(person.getIdPerson());
+            personQualification.setFkPersonId(idPerson);
             personQualification.setFkQualificationId(qualifications.get(i).getIdQualification());
 
             response = personQualificationController.store(personQualification);
@@ -694,6 +788,7 @@ public class ViewInspection extends javax.swing.JFrame {
         if (response) {
             JOptionPane.showMessageDialog(null, "Qualificações salvas!");
             this.jTabbedPane2.setSelectedIndex(2);
+            this.jTabbedPane2.setEnabledAt(2, true);
         } else {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro");
         }
@@ -779,7 +874,15 @@ public class ViewInspection extends javax.swing.JFrame {
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         JOptionPane.showMessageDialog(null, "Todo progresso não salvo será perdido");
-        new ViewDashboard(email).setVisible(true);
+        if (oldEmail == null || oldEmail.equals("")) {
+            System.out.println("YOOOOOOOOO");
+            new ViewDashboard(email).setVisible(true);
+        } else {
+            System.out.println("AEEEEEEEEEEE");
+            if (personController.show(oldEmail).getType() == 777) {
+                new ViewListInspection(oldEmail).setVisible(true);
+            }
+        }
         this.setVisible(false);
     }//GEN-LAST:event_backActionPerformed
 
@@ -828,8 +931,8 @@ public class ViewInspection extends javax.swing.JFrame {
                 this.fkPersonId.requestFocus();
 
                 id = 0;
-                idPerson = 0;
                 this.jTabbedPane2.setSelectedIndex(1);
+                this.jTabbedPane2.setEnabledAt(1, true);
                 this.qualificationController.popularTabelaXXX(qualificationsIndex, "");
             }
         } else {
@@ -851,12 +954,20 @@ public class ViewInspection extends javax.swing.JFrame {
 
             if (personInterviewController.store(personInterview)) {
                 JOptionPane.showMessageDialog(null, "Registro Salvo com sucesso!");
+                new ViewDashboard(email).setVisible(true);
+                this.setVisible(false);
             }
 
         } else {
             JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios.");
         }
     }//GEN-LAST:event_submitInterviewActionPerformed
+
+    private void recruitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recruitActionPerformed
+        this.inspectionController.changeStatusToEnlisted(this.toRecruit.isSelected(), idPerson);
+        new ViewListInspection(oldEmail).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_recruitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -937,6 +1048,7 @@ public class ViewInspection extends javax.swing.JFrame {
     private javax.swing.JTextField qualification;
     private javax.swing.JTable qualificationsIndex;
     private javax.swing.JTable qualificationsSelected;
+    private javax.swing.JButton recruit;
     private javax.swing.JButton removeFromList;
     private javax.swing.JTextArea report;
     private javax.swing.JButton searchPerson;
@@ -944,6 +1056,7 @@ public class ViewInspection extends javax.swing.JFrame {
     private javax.swing.JButton submit1;
     private javax.swing.JButton submitInterview;
     private javax.swing.JButton submitQuali;
+    private javax.swing.JCheckBox toRecruit;
     private javax.swing.JLabel warning1;
     private javax.swing.JLabel warning3;
     private javax.swing.JTextField weight;

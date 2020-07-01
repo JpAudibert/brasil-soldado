@@ -8,8 +8,16 @@ package com.brasilsoldado.view;
 import com.brasilsoldado.controller.InspectionController;
 import com.brasilsoldado.helpers.ComboItem;
 import com.brasilsoldado.helpers.CombosDAO;
+import com.brasilsoldado.helpers.DBConnection;
 import com.brasilsoldado.helpers.Validacao;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -20,6 +28,10 @@ public class ViewListInspection extends javax.swing.JFrame {
     String email;
     InspectionController inspectionController = new InspectionController();
     final CombosDAO combo = new CombosDAO();
+    int idBattalion = 0;
+    int qttMembers;
+    String location = "";
+    String criteria = "";
 
     /**
      * Creates new form ViewListInspection
@@ -34,9 +46,11 @@ public class ViewListInspection extends javax.swing.JFrame {
         combo.popularCombo("state", "idstate", "name", fkStateId, "");
         combo.popularCombo(qualificationNumber);
     }
-    
-    public void setBattalion(int id, String city, String stateInitials){
-        
+
+    public void setBattalion(int idBattalion, int qttMembers, String location) {
+        this.idBattalion = idBattalion;
+        this.qttMembers = qttMembers;
+        this.location = location;
     }
 
     /**
@@ -75,7 +89,8 @@ public class ViewListInspection extends javax.swing.JFrame {
         fkStateId = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         year = new javax.swing.JTextField();
-        search1 = new javax.swing.JButton();
+        generateReport = new javax.swing.JButton();
+        viewInspection = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1100, 600));
@@ -191,13 +206,23 @@ public class ViewListInspection extends javax.swing.JFrame {
 
         year.setMinimumSize(new java.awt.Dimension(23, 40));
 
-        search1.setForeground(new java.awt.Color(53, 53, 53));
-        search1.setText("Gerar Relatório");
-        search1.setMaximumSize(new java.awt.Dimension(70, 35));
-        search1.setMinimumSize(new java.awt.Dimension(70, 35));
-        search1.addActionListener(new java.awt.event.ActionListener() {
+        generateReport.setForeground(new java.awt.Color(53, 53, 53));
+        generateReport.setText("Gerar Relatório");
+        generateReport.setMaximumSize(new java.awt.Dimension(70, 35));
+        generateReport.setMinimumSize(new java.awt.Dimension(70, 35));
+        generateReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                search1ActionPerformed(evt);
+                generateReportActionPerformed(evt);
+            }
+        });
+
+        viewInspection.setForeground(new java.awt.Color(53, 53, 53));
+        viewInspection.setText("Visualizar");
+        viewInspection.setMaximumSize(new java.awt.Dimension(52, 35));
+        viewInspection.setMinimumSize(new java.awt.Dimension(52, 35));
+        viewInspection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewInspectionActionPerformed(evt);
             }
         });
 
@@ -215,58 +240,66 @@ public class ViewListInspection extends javax.swing.JFrame {
                         .addGap(71, 71, 71)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 955, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(fkStateId, javax.swing.GroupLayout.Alignment.TRAILING, 0, 200, Short.MAX_VALUE))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(504, 504, 504))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(fkCityId, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(45, 45, 45)
-                                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(search1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel1)
-                                            .addComponent(maxHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel1)
+                                                    .addComponent(maxHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(weightMin, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jLabel2)))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(weightLiftedMin, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                                    .addComponent(jLabel7))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(weightLiftedMax, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                                    .addComponent(jLabel6))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(fkStateId, javax.swing.GroupLayout.Alignment.TRAILING, 0, 200, Short.MAX_VALUE))
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(weightMin, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel2)))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(fkCityId, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(weightLiftedMin, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                            .addComponent(jLabel7))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(weightLiftedMax, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                            .addComponent(jLabel6))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel8))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(weightMax, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(theresFather, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGap(29, 29, 29)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(qualificationNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(year, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))))
-                .addContainerGap(94, Short.MAX_VALUE))
+                                        .addComponent(viewInspection, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(28, 28, 28)
+                                        .addComponent(generateReport, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jLabel3)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel8))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(weightMax, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(theresFather, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGap(29, 29, 29)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(qualificationNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(year, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))))))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {generateReport, search, viewInspection});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -318,11 +351,14 @@ public class ViewListInspection extends javax.swing.JFrame {
                     .addComponent(fkStateId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fkCityId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(search1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(generateReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(viewInspection, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {generateReport, search, viewInspection});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -353,7 +389,6 @@ public class ViewListInspection extends javax.swing.JFrame {
     }//GEN-LAST:event_theresFatherActionPerformed
 
     private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
-        String criteria = "";
         double minWeight = 0;
         double maxWeight = 1200;
         double minWeightLifted = 0;
@@ -361,6 +396,7 @@ public class ViewListInspection extends javax.swing.JFrame {
         ComboItem state = (ComboItem) this.fkStateId.getSelectedItem();
         ComboItem city = (ComboItem) this.fkCityId.getSelectedItem();
         ComboItem quali = (ComboItem) this.qualificationNumber.getSelectedItem();
+        this.criteria = "";
 
         if (Validacao.notNull(this.maxHeight.getText())) {
             criteria += " AND i.height <= " + this.maxHeight.getText();
@@ -390,7 +426,8 @@ public class ViewListInspection extends javax.swing.JFrame {
         if (Validacao.notNull(this.year.getText())) {
             criteria += " AND i.\"year\" = " + this.year.getText();
         }
-
+        
+        System.out.println(criteria);
 
         inspectionController.popularTabelaXXX(inspectioned, criteria, quali.getCodigo());
     }//GEN-LAST:event_searchActionPerformed
@@ -399,9 +436,37 @@ public class ViewListInspection extends javax.swing.JFrame {
         combo.popularCombo("city", "idcity", "name", fkCityId, " WHERE fkstateid = " + this.fkStateId.getSelectedIndex());
     }//GEN-LAST:event_fkStateIdActionPerformed
 
-    private void search1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_search1ActionPerformed
+    private void generateReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportActionPerformed
+        DlgBattalion dlgSeacrhBattalion = new DlgBattalion(null, true, this);
+        dlgSeacrhBattalion.setVisible(true);
+        
+        String fullCriteria = "";
+        String auxCriteria = " p.type = 3 ";
+        fullCriteria = auxCriteria + criteria;
+        
+        try {
+            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/com/brasilsoldado/reports/call.jrxml"));
+
+            Map params = new HashMap();
+            params.put("city", this.location);
+            params.put("criteria", fullCriteria);
+            params.put("qualifications", this.qualificationNumber.getSelectedIndex());
+            params.put("qttMembers", this.qttMembers);
+
+            JasperPrint press = JasperFillManager.fillReport(report, params, DBConnection.getInstance().getConnection());
+
+            JasperViewer.viewReport(press, false);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao gerar relatorio: " + e);
+        } 
+    }//GEN-LAST:event_generateReportActionPerformed
+
+    private void viewInspectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewInspectionActionPerformed
+        String viewEmail = String.valueOf(inspectioned.getValueAt(inspectioned.getSelectedRow(), 3));
+        new ViewInspection(viewEmail, true, email).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_viewInspectionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -443,6 +508,7 @@ public class ViewListInspection extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> fkCityId;
     private javax.swing.JComboBox<String> fkStateId;
+    private javax.swing.JButton generateReport;
     private javax.swing.JTable inspectioned;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -460,8 +526,8 @@ public class ViewListInspection extends javax.swing.JFrame {
     private javax.swing.JTextField maxHeight;
     private javax.swing.JComboBox<String> qualificationNumber;
     private javax.swing.JButton search;
-    private javax.swing.JButton search1;
     private javax.swing.JCheckBox theresFather;
+    private javax.swing.JButton viewInspection;
     private javax.swing.JTextField weightLiftedMax;
     private javax.swing.JTextField weightLiftedMin;
     private javax.swing.JTextField weightMax;

@@ -161,7 +161,7 @@ public class ViewReportStateBattalion extends javax.swing.JFrame {
             JasperPrint press = JasperFillManager.fillReport(report, params, DBConnection.getInstance().getConnection());
 
             JasperViewer.viewReport(press, false);
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro ao gerar relatorio: " + e);
         }    }//GEN-LAST:event_reportAdmPerStateActionPerformed

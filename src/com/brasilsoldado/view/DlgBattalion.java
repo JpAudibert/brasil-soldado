@@ -14,12 +14,22 @@ import javax.swing.JOptionPane;
  */
 public class DlgBattalion extends javax.swing.JDialog {
 
+    ViewListInspection viewListInspection = null;
+    
     /**
      * Creates new form DlgBattalion
      */
     public DlgBattalion(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        new BattalionController().popularTabelaXXX(battalions, "");
+    }
+    
+    public DlgBattalion(java.awt.Frame parent, boolean modal, ViewListInspection viewListInspection) {
+        super(parent, modal);
+        initComponents();
+        this.viewListInspection = viewListInspection;
+        new BattalionController().popularTabelaXXX(battalions, "");
     }
 
     /**
@@ -151,9 +161,10 @@ public class DlgBattalion extends javax.swing.JDialog {
     private void selectBattalionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBattalionActionPerformed
         if (battalions.getSelectedRow() != -1) {
             int id = Integer.parseInt(String.valueOf(battalions.getValueAt(battalions.getSelectedRow(), 0)));
-            String name = String.valueOf(battalions.getValueAt(battalions.getSelectedRow(), 1));
+            int qttMembers = Integer.parseInt(String.valueOf(battalions.getValueAt(battalions.getSelectedRow(), 1)));
+            String city = String.valueOf(battalions.getValueAt(battalions.getSelectedRow(), 3));
 
-//            ViewListInspection.setBattalion(id, name);
+            viewListInspection.setBattalion(id, qttMembers, city);
 
             this.dispose();
         } else {
